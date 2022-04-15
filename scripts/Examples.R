@@ -127,4 +127,105 @@
 
 
 
+#Chapter 2
 
+##q1
+#Text box space name
+#textInput("text", "", placeholder = "Your name")
+
+
+##q2
+#Date slider
+# sliderInput(
+#   "dates",
+#   "When should we deliver?",
+#   min = as.Date("2019-08-09"),
+#   max = as.Date("2019-08-16"),
+#   value = as.Date("2019-08-10")
+# )
+
+
+##q3
+# ui <- fluidPage(
+#   selectInput(
+#     "breed",
+#     "Select breed",
+#     choices = 
+#       list(`dogs` = list('German Shepherd', 'Bulldog', 'Labrador'),
+#            `cats` = list('Persian', 'Benga', "Siamese")),
+#   )
+# )
+# shinyApp(ui,server)
+
+
+##q4
+#Slider with range
+# ui <- fluidPage(
+#   sliderInput("number", "A number?",
+#               min = 0, max = 100, value = 0,
+#               step = 5, animate = TRUE) #animate = increase the slider by 5 periodically
+# )
+# shinyApp(ui,server)
+
+
+##q5.1
+#Re-create the Shiny app from the plots section, this time setting height to 300px and width to 700px.
+# library(shiny)
+# 
+# ui <- fluidPage(
+#   plotOutput("plot", width = "700px", height = "300px")
+# )
+# 
+# server <- function(input, output, session) {
+#   output$plot <- renderPlot(plot(1:5), res = 96)
+# }
+# 
+# shinyApp(ui, server)
+
+
+## q5.2
+#library(shiny)
+
+#TABLE WITH SEARCH
+# ui <- fluidPage(
+#   dataTableOutput("table")
+# )
+# server <- function(input, output, session) {
+#   output$table <- renderDataTable(mtcars, options = list(pageLength = 5))
+# }
+
+
+#TABLE WITHOUT SEARCH
+# ui <- fluidPage( 
+#   dataTableOutput("table")
+# )
+# 
+# server <- function(input, output, session) {
+#   output$table <- renderDataTable(
+#     mtcars, options = list(ordering = FALSE, searching = FALSE))
+# }
+
+#shinyApp(ui, server)
+
+
+
+## q 6.1
+#Create an app that contains two plots, each of which takes up half the app 
+# 
+# library(shiny)
+# 
+# ui <- fluidPage(
+#   fluidRow(
+#     column(width = 4, plotOutput("plot1")),
+#     column(width = 4, plotOutput("plot2"))
+#   )
+# )
+# server <- function(input, output, session) {
+#   output$plot1 <- renderPlot(plot(1:5))
+#   output$plot2 <- renderPlot(plot(1:5))
+# }
+# 
+# shinyApp(ui, server)
+
+
+## q 6.2

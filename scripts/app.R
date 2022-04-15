@@ -178,7 +178,27 @@ invisible(lapply(packages, library, character.only = TRUE))
 
 
 ## File Uploads
-ui <- fluidPage(
-  fileInput("upload", NULL)
-)
-shinyApp(ui, server)
+# ui <- fluidPage(
+#   fileInput("upload", NULL)
+# )
+# shinyApp(ui, server)
+
+
+## Action Buttons
+# ui <- fluidPage(
+#   actionButton("click", "Click Me!"),
+#   actionButton("drink", "Drink me!", icon = icon("cocktail"))
+# )
+# shinyApp(ui,server)
+
+
+### Customize appearance
+# ui <- fluidPage(
+#   fluidRow(actionButton("Click", "Click", class = "btn-danger"), #red button
+#            actionButton("drink", "Drink", class = "btn-lg btn-success") #bigger green button
+#     ),
+#   fluidRow(
+#     actionButton("eat","EAT", class = "btn-block") #big button
+#   )
+# )
+# shinyApp(ui,server)
