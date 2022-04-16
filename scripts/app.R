@@ -202,3 +202,78 @@ invisible(lapply(packages, library, character.only = TRUE))
 #   )
 # )
 # shinyApp(ui,server)
+
+
+# #Outputs
+# ## Text
+# ### Output regular text with textOutput() and fixed width text (e.g., console output) with verbatimTextOutput()
+# ui <- fluidPage(
+#   textOutput("text"),
+#   verbatimTextOutput("code")
+# )
+# server <- function(input, output, session){
+#   output$text <- renderText({
+#     "Hello Friend!!"
+#   })
+#   output$code <- renderPrint({
+#     summary(1:10)
+#   })
+# }
+# shinyApp(ui, server)
+
+#renderText() This combines the result into a single string and is usually paired with textOutput() . 
+#renderPrint() This prints the result, as if you were in an R console, and is usually paired with verbatimTextOutput()
+
+#Difference between textOutput() and verbatimTextOutput
+# ui <- fluidPage(
+#   textOutput("text"),
+#   verbatimTextOutput("print")
+# )
+# server <- function(input, output, session){
+#   output$text <- renderText("hello")
+#   output$print <- renderPrint("hello")
+# }
+# shinyApp(ui,server)
+
+
+##Tables
+#tableOutput() and renderTable() These render a static table of data, showing all the data at once. 
+#dataTableOutput() and renderDataTable() These render a dynamic table, showing a fixed number of rows along with controls to change which rows are visible.
+
+# ui <- fluidPage(
+#   tableOutput("static"),
+#   dataTableOutput("dynamic")
+# )
+# server <- function(input, output, session){
+#   output$static <- renderTable(head(mtcars))
+#   output$dynamic <- renderDataTable(mtcars, options = list(pageLength = 5))
+# }
+# shinyApp(ui,server)
+
+#If you want greater control over the output of dataTableOutput() , I highly recommend the reactable package by Greg Lin
+
+
+##Plots
+# ui <- fluidPage(
+#   plotOutput("plot", width = "400px")
+# )
+# server <- function(input, output, session) {
+#   output$plot <- renderPlot(plot(1:5), res = 96)
+# }
+# shinyApp(ui, server)
+
+
+
+##Reactive programming
+
+###Both input and output
+# ui <- fluidPage(
+#   textInput("name", "Name?"),
+#   textOutput("greeting")
+# )
+# server <- function(input, output, session) {
+#   output$greeting <- renderText({
+#     paste0("Hello ", input$name, "!")
+#   })
+# }
+# shinyApp(ui,server)

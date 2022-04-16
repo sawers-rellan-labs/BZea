@@ -229,3 +229,55 @@
 
 
 ## q 6.2
+#Modify the central limit theorem app so that the sidebar is on the right instead of the left
+# ui <- fluidPage(
+#   headerPanel("Central limit theorem"),
+#   sidebarLayout(
+#     position = "right",
+#     sidebarPanel(
+#       numericInput("m", "Number of samples:", 2, min = 1, max = 100)
+#     ),
+#     mainPanel(
+#       plotOutput("hist")
+#     )
+#   )
+# )
+# server <- function(input, output, session){
+#   output$plot1 <- renderPlot(plot(1:5))
+#   output$plot2 <- renderPlot(plot(1:5))
+# }
+
+
+
+
+
+#SHINY THEMES
+#THEMES: https://rstudio.github.io/shinythemes/
+# library(shinythemes)
+# 
+# ui <- fluidPage(
+#   theme = shinythemes::shinytheme("superhero"),
+#   headerPanel("Central limit theorem"),
+#   sidebarLayout(
+#     position = "right",
+#     sidebarPanel(
+#       numericInput("m", "Number of samples:", 2, min = 1, max = 100)
+#     ),
+#     mainPanel(
+#       plotOutput("hist")
+#     )
+#   )
+# )
+# 
+# server <- function(input, output, session) {
+#   output$hist <- renderPlot({
+#     means <- replicate(1e4, mean(runif(input$m)))
+#     hist(means, breaks = 20)
+#   })
+# }
+# 
+# shinyApp(ui, server)
+
+
+
+
