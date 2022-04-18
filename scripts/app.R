@@ -676,97 +676,6 @@ invisible(lapply(packages, library, character.only = TRUE))
 #Prototype
 
 
-
-
-
-
-
-
-# PART II
-#SHINY IN ACTION
-
-##Chapter 6
-##Layout, Themes, HTML
-# 
-# fluidPage(
-#   titlePanel(
-#     #app title/description
-#   ),
-#   sidebarLayout(
-#     sidebarPanel(
-#       #inputs
-#     ),
-#     mainPanel(
-#       #outputs
-#     )
-#   )
-# )
-
-
-# ui <- fluidPage(
-#   titlePanel("Central Limit Theorem"),
-#   sidebarLayout(
-#     sidebarPanel(
-#       numericInput("m", "Number of samples:", 2, min = 1, max = 100)
-#     ),
-#     mainPanel(
-#       plotOutput("hist")
-#     )
-#   )
-# )
-# 
-# server <- function(input, output, session) {
-#   output$hist <- renderPlot({
-#     means <- replicate(1e4, mean(runif(input$m)))
-#     hist(means, breaks = 20)
-#   }, res = 96)
-# }
-# shinyApp(ui, server)
-
-
-#Multirow
-# fluidPage( 
-#   fluidRow( 
-#     column(4,
-#            ... 
-#            ), 
-#     column(8,
-#            .. 
-#            ) 
-#     ), 
-#   fluidRow( 
-#     column(6,
-#            ... 
-#            ), 
-#     column(6,
-#            ... 
-#            ) 
-#     )
-# )
-  
-
-
-#Multipage layouts
-#Tabsets
-ui <- fluidPage(
-  tabsetPanel(
-    tabPanel("Import data",
-             fileInput("file", "Data", buttonLabel = "Upload..."),
-             textInput("delim", "Delimiter (leave blank to guess)", ", or tab or space"),
-             numericInput("skip", "Rows to skip", 0, min = 0),
-             numericInput("rows", "Rows to preview", 10, min = 1)
-             ),
-    tabPanel("Set parameters"),
-    tabPanel("Visualize results")
-  )
-)
-
-shinyApp(ui,server)           
-=======
-
-
-
-
 #Chapter 4 
 ## Case Study: ER Injuries
 
@@ -856,24 +765,102 @@ shinyApp(ui,server)
 #   )
 # )
 
+#Page functions
+# ui <- fluidPage(
+#   titlePanel("Central Limit Theorem"),
+#   sidebarLayout(
+#     sidebarPanel(
+#       numericInput("m", "Number of samples:", 2, min = 1, max = 100)
+#     ),
+#     mainPanel(
+#       plotOutput("hist")
+#     )
+#   )
+# )
+# 
+# server <- function(input, output, session) {
+#   output$hist <- renderPlot({
+#     means <- replicate(1e4, mean(runif(input$m)))
+#     hist(means, breaks = 20)
+#   }, res = 96)
+# }
+# shinyApp(ui, server)
 
-ui <- fluidPage(
-  titlePanel("Central Limit Theorem"),
-  sidebarLayout(
-    sidebarPanel(
-      numericInput("m", "Number of samples:", 2, min = 1, max = 100)
-    ),
-    mainPanel(
-      plotOutput("hist")
-    )
-  )
-)
 
-server <- function(input, output, session) {
-  output$hist <- renderPlot({
-    means <- replicate(1e4, mean(runif(input$m)))
-    hist(means, breaks = 20)
-  }, res = 96)
-}
-shinyApp(ui, server)
->>>>>>> 761b983793dff642f9d607edc7c8560934298b3b
+# Multi Page 
+# fluidPage(
+#   titlePanel(
+#     #app title/description
+#   ),
+#   sidebarLayout(
+#     sidebarPanel(
+#       #inputs
+#     ),
+#     mainPanel(
+#       #outputs
+#     )
+#   )
+# )
+
+
+# ui <- fluidPage(
+#   titlePanel("Central Limit Theorem"),
+#   sidebarLayout(
+#     sidebarPanel(
+#       numericInput("m", "Number of samples:", 2, min = 1, max = 100)
+#     ),
+#     mainPanel(
+#       plotOutput("hist")
+#     )
+#   )
+# )
+# 
+# server <- function(input, output, session) {
+#   output$hist <- renderPlot({
+#     means <- replicate(1e4, mean(runif(input$m)))
+#     hist(means, breaks = 20)
+#   }, res = 96)
+# }
+# shinyApp(ui, server)
+
+
+#Multirow
+# fluidPage( 
+#   fluidRow( 
+#     column(4,
+#            ... 
+#            ), 
+#     column(8,
+#            .. 
+#            ) 
+#     ), 
+#   fluidRow( 
+#     column(6,
+#            ... 
+#            ), 
+#     column(6,
+#            ... 
+#            ) 
+#     )
+# )
+
+
+
+#Multipage layouts
+#Tabsets
+# ui <- fluidPage(
+#   tabsetPanel(
+#     tabPanel("Import data",
+#              fileInput("file", "Data", buttonLabel = "Upload..."),
+#              textInput("delim", "Delimiter (leave blank to guess)", ", or tab or space"),
+#              numericInput("skip", "Rows to skip", 0, min = 0),
+#              numericInput("rows", "Rows to preview", 10, min = 1)
+#              ),
+#     tabPanel("Set parameters"),
+#     tabPanel("Visualize results")
+#   )
+# )
+# 
+# shinyApp(ui,server)     
+
+
