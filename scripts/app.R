@@ -279,71 +279,137 @@ invisible(lapply(packages, library, character.only = TRUE))
 # shinyApp(ui,server)
 
 #Comparing two Data
-library(ggplot2)
-freqpoly <- function(x1, x2, binwidth = 0.1, xlim = c(-3, 3)){
-  df <- data.frame(
-    x = c(x1, x2),
-    g = c(rep("x1", length(x1)), rep("x2", length(x2)))
-  )
-  ggplot(df, aes(x, colour =g)) +
-    geom_freqpoly(binwidth = binwidth, size = 1) +
-    coord_cartesian(xlim = xlim)
+# library(ggplot2)
+# freqpoly <- function(x1, x2, binwidth = 0.1, xlim = c(-3, 3)){
+#   df <- data.frame(
+#     x = c(x1, x2),
+#     g = c(rep("x1", length(x1)), rep("x2", length(x2)))
+#   )
+#   ggplot(df, aes(x, colour =g)) +
+#     geom_freqpoly(binwidth = binwidth, size = 1) +
+#     coord_cartesian(xlim = xlim)
+# }
+# 
+# t_test <- function(x1,x2){
+#   test <- t.test(x1,x2)
+#   #use sprintf() to format t.test() results compactly
+#   sprintf(
+#     "p value: %0.3f\n[%0.2f, %0.2f]",
+#     test$p.value, test$conf.int[1], test$conf.int[2]
+#   )
+# }
+# #Stimulated data, use function to compare two variables
+# x1 <- rnorm(100, mean = 0, sd = 0.5)
+# x2 <- rnorm(200, mean = 0.15, sd = 0.9)
+# 
+# freqpoly(x1,x2)
+# cat(t_test(x1, x2))
+# 
+# ui <- fluidPage(
+#   fluidRow(
+#     column(4,
+#            "Distribution 1",
+#            numericInput("n1", label = "n", value = 1000, min = 1),
+#            numericInput("mean1", label = "μ", value =0, step = 0.1),
+#            numericInput("sd1", label = "σ", value = 0.5, min = 0.1, step = 0.1)
+#     ),
+#     column(4,
+#            "Distribution 2",
+#            numericInput("n2", label = "n", value = 1000, min = 1),
+#            numericInput("mean2", label = "μ", value = 0, step = 0.1),
+#            numericInput("sd2", label = "σ", value = 0.5, min = 0.1, step = 0.1)
+#            ),
+#     column (4, 
+#             "Frequency polygon" , 
+#             numericInput ("binwidth" , label = "Bin width" , value = 0.1, step = 0.1), 
+#             sliderInput ("range" , label = "range" , value = c(-3, 3), min = -5, max = 5)
+#     )        
+#   ),
+#   fluidRow(
+#     column(9, plotOutput("hist")),
+#     column(3, verbatimTextOutput("ttest"))
+#   )
+# )
+# 
+# server <- function(input, output, session){
+#   output$hist <- renderPlot({
+#     x1 <- rnorm(input$n1, input$mean1, input$sd1)
+#     x2 <- rnorm(input$n2, input$mean, input$sd2)
+#     
+#     freqpoly(x1, x2, binwidth = input$binwidth, xlim = input$range)
+#   }, res = 96)
+#   output$ttest <- renderText({
+#     x1 <- rnorm(input$n1, input$mean1, input$sd1)
+#     x2 <- rnorm(input$n2, input$mean2, input$sd2)
+#     
+#     t_test(x1, x2)
+#   })
+# }
+# 
+# shinyApp(ui, server)
+
+
+
+
+
+#Chapter 4 
+## Case Study: ER Injuries
+
+## Getting data
+dir.create("neiss")
+download <- function(name) {
+  url <- "https://github.com/hadley/mastering-shiny/raw/master/neiss/" 
+  download.file(paste0(url, name), paste0("neiss/", name), quiet = TRUE)
 }
+download("injuries.tsv.gz")
+download("population.tsv")
+download("products.tsv")
 
-t_test <- function(x1,x2){
-  test <- t.test(x1,x2)
-  #use sprintf() to format t.test() results compactly
-  sprintf(
-    "p value: %0.3f\n[%0.2f, %0.2f]",
-    test$p.value, test$conf.int[1], test$conf.int[2]
-  )
-}
-#Stimulated data, use function to compare two variables
-x1 <- rnorm(100, mean = 0, sd = 0.5)
-x2 <- rnorm(200, mean = 0.15, sd = 0.9)
+###Main dataset
+injuries <- vroom::vroom("neiss/injuries.tsv.gz")
+injuries
 
-freqpoly(x1,x2)
-cat(t_test(x1, x2))
+### Data sets to connect
+products <- vroom::vroom("neiss/products.tsv")
+products
 
-ui <- fluidPage(
-  fluidRow(
-    column(4,
-           "Distribution 1",
-           numericInput("n1", label = "n", value = 1000, min = 1),
-           numericInput("mean1", label = "μ", value =0, step = 0.1),
-           numericInput("sd1", label = "σ", value = 0.5, min = 0.1, step = 0.1)
-    ),
-    column(4,
-           "Distribution 2",
-           numericInput("n2", label = "n", value = 1000, min = 1),
-           numericInput("mean2", label = "μ", value = 0, step = 0.1),
-           numericInput("sd2", label = "σ", value = 0.5, min = 0.1, step = 0.1)
-           ),
-    column (4, 
-            "Frequency polygon" , 
-            numericInput ("binwidth" , label = "Bin width" , value = 0.1, step = 0.1), 
-            sliderInput ("range" , label = "range" , value = c(-3, 3), min = -5, max = 5)
-    )        
-  ),
-  fluidRow(
-    column(9, plotOutput("hist")),
-    column(3, verbatimTextOutput("ttest"))
-  )
-)
+population <- vroom::vroom("neiss/population.tsv")
+population
 
-server <- function(input, output, session){
-  output$hist <- renderPlot({
-    x1 <- rnorm(input$n1, input$mean1, input$sd1)
-    x2 <- rnorm(input$n2, input$mean, input$sd2)
-    
-    freqpoly(x1, x2, binwidth = input$binwidth, xlim = input$range)
-  }, res = 96)
-  output$ttest <- renderText({
-    x1 <- rnorm(input$n1, input$mean1, input$sd1)
-    x2 <- rnorm(input$n2, input$mean2, input$sd2)
-    
-    t_test(x1, x2)
-  })
-}
 
-shinyApp(ui, server)
+##Explore the data
+selected <- injuries %>% filter(prod_code == 649)
+nrow(selected)
+### Basic summary: location, body part and diagnosis of toilet related injuries
+selected %>% count(location, wt = weight, sort = TRUE)
+selected %>% count(body_part, wt = weight, sort = TRUE)
+selected %>% count(diag, wt = weight, sort = TRUE)
+summary <- selected %>%
+  count(age, sex, wt = weight)
+summary
+
+###GRAPH
+summary %>%
+  ggplot(aes(age, n, colour = sex)) +
+  geom_line() +
+  labs(y = "Estimated number of injuries")
+
+### no. of older people fewer than younger so graph may be wrong. So normalize the data per 10,000
+summary <- selected %>%
+  count(age, sex, wt = weight) %>%
+  left_join(population, by = c("age", "sex")) %>%
+  mutate(rate = n / population * 1e4)
+summary
+
+summary %>%
+  ggplot(aes(age, rate, colour = sex)) +
+  geom_line(na.rm = TRUE) +
+  labs(y = "Injuries per 10k people")
+
+##Making hypothesis: random sample of 10
+selected %>%
+  sample_n(10) %>%
+  pull(narrative)
+
+
+#Prototype
