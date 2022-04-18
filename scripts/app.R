@@ -352,64 +352,65 @@ invisible(lapply(packages, library, character.only = TRUE))
 
 
 
-#Chapter 4 
+
+##Chapter 4 
 ## Case Study: ER Injuries
 
 ## Getting data
-dir.create("neiss")
-download <- function(name) {
-  url <- "https://github.com/hadley/mastering-shiny/raw/master/neiss/" 
-  download.file(paste0(url, name), paste0("neiss/", name), quiet = TRUE)
-}
-download("injuries.tsv.gz")
-download("population.tsv")
-download("products.tsv")
-
-###Main dataset
-injuries <- vroom::vroom("neiss/injuries.tsv.gz")
-injuries
-
-### Data sets to connect
-products <- vroom::vroom("neiss/products.tsv")
-products
-
-population <- vroom::vroom("neiss/population.tsv")
-population
-
-
-##Explore the data
-selected <- injuries %>% filter(prod_code == 649)
-nrow(selected)
-### Basic summary: location, body part and diagnosis of toilet related injuries
-selected %>% count(location, wt = weight, sort = TRUE)
-selected %>% count(body_part, wt = weight, sort = TRUE)
-selected %>% count(diag, wt = weight, sort = TRUE)
-summary <- selected %>%
-  count(age, sex, wt = weight)
-summary
-
-###GRAPH
-summary %>%
-  ggplot(aes(age, n, colour = sex)) +
-  geom_line() +
-  labs(y = "Estimated number of injuries")
-
-### no. of older people fewer than younger so graph may be wrong. So normalize the data per 10,000
-summary <- selected %>%
-  count(age, sex, wt = weight) %>%
-  left_join(population, by = c("age", "sex")) %>%
-  mutate(rate = n / population * 1e4)
-summary
-
-summary %>%
-  ggplot(aes(age, rate, colour = sex)) +
-  geom_line(na.rm = TRUE) +
-  labs(y = "Injuries per 10k people")
-
-##Making hypothesis: random sample of 10
-selected %>%
-  sample_n(10) %>%
-  pull(narrative)
+# dir.create("neiss")
+# download <- function(name) {
+#   url <- "https://github.com/hadley/mastering-shiny/raw/master/neiss/" 
+#   download.file(paste0(url, name), paste0("neiss/", name), quiet = TRUE)
+# }
+# download("injuries.tsv.gz")
+# download("population.tsv")
+# download("products.tsv")
+# 
+# ###Main dataset
+# injuries <- vroom::vroom("neiss/injuries.tsv.gz")
+# injuries
+# 
+# ### Data sets to connect
+# products <- vroom::vroom("neiss/products.tsv")
+# products
+# 
+# population <- vroom::vroom("neiss/population.tsv")
+# population
+# 
+# 
+# ##Explore the data
+# selected <- injuries %>% filter(prod_code == 649)
+# nrow(selected)
+# ### Basic summary: location, body part and diagnosis of toilet related injuries
+# selected %>% count(location, wt = weight, sort = TRUE)
+# selected %>% count(body_part, wt = weight, sort = TRUE)
+# selected %>% count(diag, wt = weight, sort = TRUE)
+# summary <- selected %>%
+#   count(age, sex, wt = weight)
+# summary
+# 
+# ###GRAPH
+# summary %>%
+#   ggplot(aes(age, n, colour = sex)) +
+#   geom_line() +
+#   labs(y = "Estimated number of injuries")
+# 
+# ### no. of older people fewer than younger so graph may be wrong. So normalize the data per 10,000
+# summary <- selected %>%
+#   count(age, sex, wt = weight) %>%
+#   left_join(population, by = c("age", "sex")) %>%
+#   mutate(rate = n / population * 1e4)
+# summary
+# 
+# summary %>%
+#   ggplot(aes(age, rate, colour = sex)) +
+#   geom_line(na.rm = TRUE) +
+#   labs(y = "Injuries per 10k people")
+# 
+# ##Making hypothesis: random sample of 10
+# selected %>%
+#   sample_n(10) %>%
+#   pull(narrative)
 
 
 #Prototype
@@ -465,18 +466,18 @@ selected %>%
 ### Truncate the tables using forcats funcction
 ### Convert the variable to a factor, order by the frequency of the levels, and then lump together all levels after the top five:
 
-injuries %>%
-  mutate(diag = fct_lump(fct_infreq(diag), n = 5)) %>%
-  group_by(diag) %>%
-  summarize(n = as.integer(sum(weight)))
-
-## Automate for every variable: a function
-count_top <- function(df, var, n = 5){
-  df %>%
-    mutate({{ var }} := fct_lump(fct_infreq({{ var }}), n = n)) %>%
-    group_by({{ var }}) %>%
-    summarize(n = as.integer(sum(weight)))
-}
+# injuries %>%
+#   mutate(diag = fct_lump(fct_infreq(diag), n = 5)) %>%
+#   group_by(diag) %>%
+#   summarize(n = as.integer(sum(weight)))
+# 
+# ## Automate for every variable: a function
+# count_top <- function(df, var, n = 5){
+#   df %>%
+#     mutate({{ var }} := fct_lump(fct_infreq({{ var }}), n = n)) %>%
+#     group_by({{ var }}) %>%
+#     summarize(n = as.integer(sum(weight)))
+# }
 
 ### Use this in the Server function
 # output$diag <- renderTable(count_top(selected(), diag), width = "100%")
@@ -524,42 +525,42 @@ count_top <- function(df, var, n = 5){
 
 
 
-
-
-prod_codes <- setNames(products$prod_code, products$title)
-ui <- fluidPage (
-  fluidRow( 
-    column(8,
-           selectInput("code", "Product",
-                       choices = setNames(products$prod_code, products$title),
-                       width = "100%"
-           ) 
-    ), 
-    column(2, selectInput("y", "Y axis", c("rate", "count"))) 
-  ),
-  fluidRow(
-    column(8, 
-           selectInput("code", "Product",
-                       choices = setNames(products$prod_code, products$title),
-                       width = "100%"
-           )
-    ),
-    column(2, selectInput("y", "Y axis", c("rate", "count")))
-    ),
-  fluidRow(
-    column(6,
-           selectInput("code", "Product", choices = prod_codes)
-    )
-  ),
-  fluidRow(
-    column(4, tableOutput("diag")),
-    column(4, tableOutput("body_part")),
-    column(4, tableOutput("location"))
-  ),
-  fluidRow(
-    column(12, plotOutput("age_sex"))
-  )
-)
+# 
+# 
+# prod_codes <- setNames(products$prod_code, products$title)
+# ui <- fluidPage (
+#   fluidRow( 
+#     column(8,
+#            selectInput("code", "Product",
+#                        choices = setNames(products$prod_code, products$title),
+#                        width = "100%"
+#            ) 
+#     ), 
+#     column(2, selectInput("y", "Y axis", c("rate", "count"))) 
+#   ),
+#   fluidRow(
+#     column(8, 
+#            selectInput("code", "Product",
+#                        choices = setNames(products$prod_code, products$title),
+#                        width = "100%"
+#            )
+#     ),
+#     column(2, selectInput("y", "Y axis", c("rate", "count")))
+#     ),
+#   fluidRow(
+#     column(6,
+#            selectInput("code", "Product", choices = prod_codes)
+#     )
+#   ),
+#   fluidRow(
+#     column(4, tableOutput("diag")),
+#     column(4, tableOutput("body_part")),
+#     column(4, tableOutput("location"))
+#   ),
+#   fluidRow(
+#     column(12, plotOutput("age_sex"))
+#   )
+# )
 
 ### Conditioned on that input
 # output$age_sex <- renderPlot({
@@ -577,33 +578,186 @@ ui <- fluidPage (
 # }, res = 96)
 
 
+# 
+# server <- function(input, output, session) { 
+#   selected <- reactive(injuries %>% filter(prod_code == input$code)) 
+#   
+#   output$diag <- renderTable(count_top(selected(), diag), width = "100%")
+#   output$body_part <- renderTable(count_top(selected(), body_part), width = "100%")
+#   output$location <- renderTable(count_top(selected(), location), width = "100%")
+#   
+#   summary <- reactive({ 
+#     selected() %>% 
+#       count(age, sex, wt = weight) %>%
+#       left_join(population, by = c("age", "sex")) %>%
+#       mutate(rate = n / population * 1e4) 
+#   }) 
+#   
+#   output$age_sex <- renderPlot({
+#     if(input$y == "count") {
+#       summary() %>%
+#         ggplot(aes(age, n, colour = sex)) +
+#         geom_line() +
+#         labs(y = "Estimated number of injuries")
+#     } else {
+#       summary() %>%
+#         ggplot(aes(age, rate, coulout = sex)) +
+#         geom_line(na.rm = TRUE) +
+#         labs(y = "Injuries per 10,000 people")
+#     }
+#   }, res = 96)
+# }
+# shinyApp(ui,server)
 
-server <- function(input, output, session) { 
-  selected <- reactive(injuries %>% filter(prod_code == input$code)) 
+
+
+
+#Chapter 4 
+## Case Study: ER Injuries
+
+## Getting data
+# dir.create("neiss")
+# download <- function(name) {
+#   url <- "https://github.com/hadley/mastering-shiny/raw/master/neiss/" 
+#   download.file(paste0(url, name), paste0("neiss/", name), quiet = TRUE)
+# }
+# download("injuries.tsv.gz")
+# download("population.tsv")
+# download("products.tsv")
+# 
+# ###Main dataset
+# injuries <- vroom::vroom("neiss/injuries.tsv.gz")
+# injuries
+# 
+# ### Data sets to connect
+# products <- vroom::vroom("neiss/products.tsv")
+# products
+# 
+# population <- vroom::vroom("neiss/population.tsv")
+# population
+# 
+# 
+# ##Explore the data
+# selected <- injuries %>% filter(prod_code == 649)
+# nrow(selected)
+# ### Basic summary: location, body part and diagnosis of toilet related injuries
+# selected %>% count(location, wt = weight, sort = TRUE)
+# selected %>% count(body_part, wt = weight, sort = TRUE)
+# selected %>% count(diag, wt = weight, sort = TRUE)
+# summary <- selected %>%
+#   count(age, sex, wt = weight)
+# summary
+# 
+# ###GRAPH
+# summary %>%
+#   ggplot(aes(age, n, colour = sex)) +
+#   geom_line() +
+#   labs(y = "Estimated number of injuries")
+# 
+# ### no. of older people fewer than younger so graph may be wrong. So normalize the data per 10,000
+# summary <- selected %>%
+#   count(age, sex, wt = weight) %>%
+#   left_join(population, by = c("age", "sex")) %>%
+#   mutate(rate = n / population * 1e4)
+# summary
+# 
+# summary %>%
+#   ggplot(aes(age, rate, colour = sex)) +
+#   geom_line(na.rm = TRUE) +
+#   labs(y = "Injuries per 10k people")
+# 
+# ##Making hypothesis: random sample of 10
+# selected %>%
+#   sample_n(10) %>%
+#   pull(narrative)
+
+
+#Prototype
+
+
+
+
+
+
+
+
+# PART II
+#SHINY IN ACTION
+
+##Chapter 6
+##Layout, Themes, HTML
+# 
+# fluidPage(
+#   titlePanel(
+#     #app title/description
+#   ),
+#   sidebarLayout(
+#     sidebarPanel(
+#       #inputs
+#     ),
+#     mainPanel(
+#       #outputs
+#     )
+#   )
+# )
+
+
+# ui <- fluidPage(
+#   titlePanel("Central Limit Theorem"),
+#   sidebarLayout(
+#     sidebarPanel(
+#       numericInput("m", "Number of samples:", 2, min = 1, max = 100)
+#     ),
+#     mainPanel(
+#       plotOutput("hist")
+#     )
+#   )
+# )
+# 
+# server <- function(input, output, session) {
+#   output$hist <- renderPlot({
+#     means <- replicate(1e4, mean(runif(input$m)))
+#     hist(means, breaks = 20)
+#   }, res = 96)
+# }
+# shinyApp(ui, server)
+
+
+#Multirow
+# fluidPage( 
+#   fluidRow( 
+#     column(4,
+#            ... 
+#            ), 
+#     column(8,
+#            .. 
+#            ) 
+#     ), 
+#   fluidRow( 
+#     column(6,
+#            ... 
+#            ), 
+#     column(6,
+#            ... 
+#            ) 
+#     )
+# )
   
-  output$diag <- renderTable(count_top(selected(), diag), width = "100%")
-  output$body_part <- renderTable(count_top(selected(), body_part), width = "100%")
-  output$location <- renderTable(count_top(selected(), location), width = "100%")
-  
-  summary <- reactive({ 
-    selected() %>% 
-      count(age, sex, wt = weight) %>%
-      left_join(population, by = c("age", "sex")) %>%
-      mutate(rate = n / population * 1e4) 
-  }) 
-  
-  output$age_sex <- renderPlot({
-    if(input$y == "count") {
-      summary() %>%
-        ggplot(aes(age, n, colour = sex)) +
-        geom_line() +
-        labs(y = "Estimated number of injuries")
-    } else {
-      summary() %>%
-        ggplot(aes(age, rate, coulout = sex)) +
-        geom_line(na.rm = TRUE) +
-        labs(y = "Injuries per 10,000 people")
-    }
-  }, res = 96)
-}
-shinyApp(ui,server)
+
+
+#Multipage layouts
+#Tabsets
+ui <- fluidPage(
+  tabsetPanel(
+    tabPanel("Import data",
+             fileInput("file", "Data", buttonLabel = "Upload..."),
+             textInput("delim", "Delimiter (leave blank to guess)", ", or tab or space"),
+             numericInput("skip", "Rows to skip", 0, min = 0),
+             numericInput("rows", "Rows to preview", 10, min = 1)
+             ),
+    tabPanel("Set parameters"),
+    tabPanel("Visualize results")
+  )
+)
+
+shinyApp(ui,server)           
