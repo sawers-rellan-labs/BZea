@@ -608,6 +608,7 @@ invisible(lapply(packages, library, character.only = TRUE))
 #   }, res = 96)
 # }
 # shinyApp(ui,server)
+<<<<<<< HEAD
 
 
 
@@ -761,3 +762,118 @@ ui <- fluidPage(
 )
 
 shinyApp(ui,server)           
+=======
+
+
+
+
+#Chapter 4 
+## Case Study: ER Injuries
+
+## Getting data
+# dir.create("neiss")
+# download <- function(name) {
+#   url <- "https://github.com/hadley/mastering-shiny/raw/master/neiss/" 
+#   download.file(paste0(url, name), paste0("neiss/", name), quiet = TRUE)
+# }
+# download("injuries.tsv.gz")
+# download("population.tsv")
+# download("products.tsv")
+# 
+# ###Main dataset
+# injuries <- vroom::vroom("neiss/injuries.tsv.gz")
+# injuries
+# 
+# ### Data sets to connect
+# products <- vroom::vroom("neiss/products.tsv")
+# products
+# 
+# population <- vroom::vroom("neiss/population.tsv")
+# population
+# 
+# 
+# ##Explore the data
+# selected <- injuries %>% filter(prod_code == 649)
+# nrow(selected)
+# ### Basic summary: location, body part and diagnosis of toilet related injuries
+# selected %>% count(location, wt = weight, sort = TRUE)
+# selected %>% count(body_part, wt = weight, sort = TRUE)
+# selected %>% count(diag, wt = weight, sort = TRUE)
+# summary <- selected %>%
+#   count(age, sex, wt = weight)
+# summary
+# 
+# ###GRAPH
+# summary %>%
+#   ggplot(aes(age, n, colour = sex)) +
+#   geom_line() +
+#   labs(y = "Estimated number of injuries")
+# 
+# ### no. of older people fewer than younger so graph may be wrong. So normalize the data per 10,000
+# summary <- selected %>%
+#   count(age, sex, wt = weight) %>%
+#   left_join(population, by = c("age", "sex")) %>%
+#   mutate(rate = n / population * 1e4)
+# summary
+# 
+# summary %>%
+#   ggplot(aes(age, rate, colour = sex)) +
+#   geom_line(na.rm = TRUE) +
+#   labs(y = "Injuries per 10k people")
+# 
+# ##Making hypothesis: random sample of 10
+# selected %>%
+#   sample_n(10) %>%
+#   pull(narrative)
+
+
+#Prototype
+
+
+
+
+
+
+
+
+# PART II
+#SHINY IN ACTION
+
+##Chapter 6
+##Layout, Themes, HTML
+# 
+# fluidPage(
+#   titlePanel(
+#     #app title/description
+#   ),
+#   sidebarLayout(
+#     sidebarPanel(
+#       #inputs
+#     ),
+#     mainPanel(
+#       #outputs
+#     )
+#   )
+# )
+
+
+ui <- fluidPage(
+  titlePanel("Central Limit Theorem"),
+  sidebarLayout(
+    sidebarPanel(
+      numericInput("m", "Number of samples:", 2, min = 1, max = 100)
+    ),
+    mainPanel(
+      plotOutput("hist")
+    )
+  )
+)
+
+server <- function(input, output, session) {
+  output$hist <- renderPlot({
+    means <- replicate(1e4, mean(runif(input$m)))
+    hist(means, breaks = 20)
+  }, res = 96)
+}
+shinyApp(ui, server)
+>>>>>>> 761b983793dff642f9d607edc7c8560934298b3b
