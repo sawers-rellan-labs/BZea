@@ -919,6 +919,7 @@ invisible(lapply(packages, library, character.only = TRUE))
 
 
 #Shiny Themes
+<<<<<<< HEAD
 # ui <- fluidPage( 
 #   theme = bslib::bs_theme(bootswatch = "darkly"), 
 #   sidebarLayout( 
@@ -953,3 +954,23 @@ invisible(lapply(packages, library, character.only = TRUE))
 #   }, res = 96)
 # }
 # shinyApp(ui, server)
+=======
+ui <- fluidPage( 
+  theme = bslib::bs_theme(bootswatch = "darkly"), 
+  sidebarLayout( 
+    sidebarPanel(
+      textInput("txt", "Text input:", "text here"),
+      sliderInput("slider", "Slider input:", 1, 100, 30) 
+      ), 
+    mainPanel(
+      h1(paste0("Theme: darkly")),
+      h2("Header 2"),
+      p("Some text") 
+      ) 
+    )
+  )
+shinyApp(ui,server)
+=======
+
+>>>>>>> 7c5661f0038dd237e69d0deb892615976efa6a90
+>>>>>>> b862989e693fc384b04366677da1cae59df1903a
