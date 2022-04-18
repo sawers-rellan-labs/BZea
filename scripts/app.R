@@ -34,11 +34,11 @@ invisible(lapply(packages, library, character.only = TRUE))
 #   verbatimTextOutput("summary"),
 #   tableOutput("table")
 # )
-# #fluidPage() <-  layout function. Basic visual strucyutre of page
-# #selectInput() <-  input control. Let user interact with app by providing a value.
-#                   #select box with the label "Dataset" and choose one of built-in dataset
-# #verbatimTextoutput and tableOutput <-  output controls where to put rendered output
-#                     #verbatrimTextOutput displays code and tableOutput displays tables
+#fluidPage() <-  layout function. Basic visual strucyutre of page
+#selectInput() <-  input control. Let user interact with app by providing a value.
+                  #select box with the label "Dataset" and choose one of built-in dataset
+#verbatimTextoutput and tableOutput <-  output controls where to put rendered output
+                    #verbatrimTextOutput displays code and tableOutput displays tables
 # server <- function(input, output, session){
 # }
 # shinyApp(ui, server)
@@ -46,23 +46,24 @@ invisible(lapply(packages, library, character.only = TRUE))
 
 #Adding behavior
 # library(shiny)
-# ui <- fluidPage(
-#   selectInput("dataset", label = "Dataset", choices = ls("package:datasets")),
-#   verbatimTextOutput("summary"),
-#   tableOutput("table")
-# )
-# 
-# server <- function(input, output, session){
-#   output$summary <- renderPrint({
-#     dataset <- get(input$dataset, "package:datasets")
-#     summary(dataset)
-#   })
-#   output$table <- renderTable({
-#     dataset <- get(input$dataset, "package:datasets")
-#     dataset
-#   })
-# }
-# 
+ui <- fluidPage(
+  selectInput("dataset", label = "Dataset", choices = ls("package:datasets")),
+  verbatimTextOutput("summary"),
+  tableOutput("table")
+)
+
+server <- function(input, output, session){
+  output$summary <- renderPrint({
+    dataset <- get(input$dataset, "package:datasets")
+    summary(dataset)
+  })
+  output$table <- renderTable({
+    dataset <- get(input$dataset, "package:datasets")
+    dataset
+  })
+}
+shinyApp(ui, server)
+ 
 # #output$ID <- providing the recipe for the Shiny output with that ID
 #             #Right hand side of the assignment uses a render function to wrap some code you provide
 #             #each render{Type} function procdes different output (texts, tables and plots)
@@ -863,7 +864,7 @@ invisible(lapply(packages, library, character.only = TRUE))
 # 
 # shinyApp(ui,server)     
 
-<<<<<<< HEAD
+
 ###which tab selected use id argument to tabsetPanel()
 # ui <- fluidPage(
 #   sidebarLayout(
@@ -919,7 +920,7 @@ invisible(lapply(packages, library, character.only = TRUE))
 
 
 #Shiny Themes
-<<<<<<< HEAD
+
 # ui <- fluidPage( 
 #   theme = bslib::bs_theme(bootswatch = "darkly"), 
 #   sidebarLayout( 
