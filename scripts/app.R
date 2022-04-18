@@ -863,6 +863,7 @@ invisible(lapply(packages, library, character.only = TRUE))
 # 
 # shinyApp(ui,server)     
 
+<<<<<<< HEAD
 ###which tab selected use id argument to tabsetPanel()
 # ui <- fluidPage(
 #   sidebarLayout(
@@ -933,3 +934,6 @@ ui <- fluidPage(
     )
   )
 shinyApp(ui,server)
+=======
+
+>>>>>>> 7c5661f0038dd237e69d0deb892615976efa6a90
