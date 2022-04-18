@@ -608,9 +608,72 @@ invisible(lapply(packages, library, character.only = TRUE))
 #   }, res = 96)
 # }
 # shinyApp(ui,server)
-<<<<<<< HEAD
 
 
+
+
+
+#Chapter 4 
+## Case Study: ER Injuries
+
+## Getting data
+# dir.create("neiss")
+# download <- function(name) {
+#   url <- "https://github.com/hadley/mastering-shiny/raw/master/neiss/" 
+#   download.file(paste0(url, name), paste0("neiss/", name), quiet = TRUE)
+# }
+# download("injuries.tsv.gz")
+# download("population.tsv")
+# download("products.tsv")
+# 
+# ###Main dataset
+# injuries <- vroom::vroom("neiss/injuries.tsv.gz")
+# injuries
+# 
+# ### Data sets to connect
+# products <- vroom::vroom("neiss/products.tsv")
+# products
+# 
+# population <- vroom::vroom("neiss/population.tsv")
+# population
+# 
+# 
+# ##Explore the data
+# selected <- injuries %>% filter(prod_code == 649)
+# nrow(selected)
+# ### Basic summary: location, body part and diagnosis of toilet related injuries
+# selected %>% count(location, wt = weight, sort = TRUE)
+# selected %>% count(body_part, wt = weight, sort = TRUE)
+# selected %>% count(diag, wt = weight, sort = TRUE)
+# summary <- selected %>%
+#   count(age, sex, wt = weight)
+# summary
+# 
+# ###GRAPH
+# summary %>%
+#   ggplot(aes(age, n, colour = sex)) +
+#   geom_line() +
+#   labs(y = "Estimated number of injuries")
+# 
+# ### no. of older people fewer than younger so graph may be wrong. So normalize the data per 10,000
+# summary <- selected %>%
+#   count(age, sex, wt = weight) %>%
+#   left_join(population, by = c("age", "sex")) %>%
+#   mutate(rate = n / population * 1e4)
+# summary
+# 
+# summary %>%
+#   ggplot(aes(age, rate, colour = sex)) +
+#   geom_line(na.rm = TRUE) +
+#   labs(y = "Injuries per 10k people")
+# 
+# ##Making hypothesis: random sample of 10
+# selected %>%
+#   sample_n(10) %>%
+#   pull(narrative)
+
+
+#Prototype
 
 
 #Chapter 4 
@@ -688,6 +751,43 @@ invisible(lapply(packages, library, character.only = TRUE))
 ##Chapter 6
 ##Layout, Themes, HTML
 # 
+# fluidPage(
+#   titlePanel(
+#     #app title/description
+#   ),
+#   sidebarLayout(
+#     sidebarPanel(
+#       #inputs
+#     ),
+#     mainPanel(
+#       #outputs
+#     )
+#   )
+# )
+
+#Page functions
+# ui <- fluidPage(
+#   titlePanel("Central Limit Theorem"),
+#   sidebarLayout(
+#     sidebarPanel(
+#       numericInput("m", "Number of samples:", 2, min = 1, max = 100)
+#     ),
+#     mainPanel(
+#       plotOutput("hist")
+#     )
+#   )
+# )
+# 
+# server <- function(input, output, session) {
+#   output$hist <- renderPlot({
+#     means <- replicate(1e4, mean(runif(input$m)))
+#     hist(means, breaks = 20)
+#   }, res = 96)
+# }
+# shinyApp(ui, server)
+
+
+# Multi Page 
 # fluidPage(
 #   titlePanel(
 #     #app title/description
@@ -743,137 +843,93 @@ invisible(lapply(packages, library, character.only = TRUE))
 #            ) 
 #     )
 # )
-  
+
 
 
 #Multipage layouts
 #Tabsets
-ui <- fluidPage(
-  tabsetPanel(
-    tabPanel("Import data",
-             fileInput("file", "Data", buttonLabel = "Upload..."),
-             textInput("delim", "Delimiter (leave blank to guess)", ", or tab or space"),
-             numericInput("skip", "Rows to skip", 0, min = 0),
-             numericInput("rows", "Rows to preview", 10, min = 1)
-             ),
-    tabPanel("Set parameters"),
-    tabPanel("Visualize results")
-  )
-)
-
-shinyApp(ui,server)           
-=======
-
-
-
-
-#Chapter 4 
-## Case Study: ER Injuries
-
-## Getting data
-# dir.create("neiss")
-# download <- function(name) {
-#   url <- "https://github.com/hadley/mastering-shiny/raw/master/neiss/" 
-#   download.file(paste0(url, name), paste0("neiss/", name), quiet = TRUE)
-# }
-# download("injuries.tsv.gz")
-# download("population.tsv")
-# download("products.tsv")
+# ui <- fluidPage(
+#   tabsetPanel(
+#     tabPanel("Import data",
+#              fileInput("file", "Data", buttonLabel = "Upload..."),
+#              textInput("delim", "Delimiter (leave blank to guess)", ", or tab or space"),
+#              numericInput("skip", "Rows to skip", 0, min = 0),
+#              numericInput("rows", "Rows to preview", 10, min = 1)
+#              ),
+#     tabPanel("Set parameters"),
+#     tabPanel("Visualize results")
+#   )
+# )
 # 
-# ###Main dataset
-# injuries <- vroom::vroom("neiss/injuries.tsv.gz")
-# injuries
-# 
-# ### Data sets to connect
-# products <- vroom::vroom("neiss/products.tsv")
-# products
-# 
-# population <- vroom::vroom("neiss/population.tsv")
-# population
-# 
-# 
-# ##Explore the data
-# selected <- injuries %>% filter(prod_code == 649)
-# nrow(selected)
-# ### Basic summary: location, body part and diagnosis of toilet related injuries
-# selected %>% count(location, wt = weight, sort = TRUE)
-# selected %>% count(body_part, wt = weight, sort = TRUE)
-# selected %>% count(diag, wt = weight, sort = TRUE)
-# summary <- selected %>%
-#   count(age, sex, wt = weight)
-# summary
-# 
-# ###GRAPH
-# summary %>%
-#   ggplot(aes(age, n, colour = sex)) +
-#   geom_line() +
-#   labs(y = "Estimated number of injuries")
-# 
-# ### no. of older people fewer than younger so graph may be wrong. So normalize the data per 10,000
-# summary <- selected %>%
-#   count(age, sex, wt = weight) %>%
-#   left_join(population, by = c("age", "sex")) %>%
-#   mutate(rate = n / population * 1e4)
-# summary
-# 
-# summary %>%
-#   ggplot(aes(age, rate, colour = sex)) +
-#   geom_line(na.rm = TRUE) +
-#   labs(y = "Injuries per 10k people")
-# 
-# ##Making hypothesis: random sample of 10
-# selected %>%
-#   sample_n(10) %>%
-#   pull(narrative)
+# shinyApp(ui,server)     
 
-
-#Prototype
-
-
-
-
-
-
-
-
-# PART II
-#SHINY IN ACTION
-
-##Chapter 6
-##Layout, Themes, HTML
-# 
-# fluidPage(
-#   titlePanel(
-#     #app title/description
-#   ),
+###which tab selected use id argument to tabsetPanel()
+# ui <- fluidPage(
 #   sidebarLayout(
 #     sidebarPanel(
-#       #inputs
+#       textOutput("Panel")
 #     ),
 #     mainPanel(
-#       #outputs
+#       tabsetPanel(
+#         id = "tabset",
+#         tabPanel("panel 1", "one"),
+#         tabPanel("panel 2", "two"),
+#         tabPanel("panel 3", "three")
+#       )
 #     )
 #   )
 # )
+# server <- function(input, output, session){
+#   output$panel <- renderText({
+#     paste("Current panel:", input$tabset)
+#   })
+# }
+# shinyApp(ui, server)
 
 
-ui <- fluidPage(
-  titlePanel("Central Limit Theorem"),
-  sidebarLayout(
+#Navlists and Navbars
+#With headers
+# ui <- fluidPage(
+#   navlistPanel(
+#     id = "tabset",
+#     "Heading 1",
+#     tabPanel("panel 1", "Panel one contents"),
+#     "Heading 2",
+#     tabPanel("panel 2","Panel two contents"),
+#     tabPanel("panel 3", "Panel three contents")
+#   )
+# )
+# shinyApp(ui, server)
+
+
+#Title bars
+# ui <- navbarPage(
+#   "Page title",
+#   tabPanel("panel 1", "one"),
+#   tabPanel("panel 2", "two"),
+#   tabPanel("panel 3", "three"),
+#   navbarMenu("subpanels",
+#              tabPanel("panel 4a", "four-a"),
+#              tabPanel("panel 4b", "four-b"),
+#              tabPanel("panel 4c", "four-c")
+#              )
+# )
+# shinyApp(ui, server)
+
+
+#Shiny Themes
+ui <- fluidPage( 
+  theme = bslib::bs_theme(bootswatch = "darkly"), 
+  sidebarLayout( 
     sidebarPanel(
-      numericInput("m", "Number of samples:", 2, min = 1, max = 100)
-    ),
+      textInput("txt", "Text input:", "text here"),
+      sliderInput("slider", "Slider input:", 1, 100, 30) 
+      ), 
     mainPanel(
-      plotOutput("hist")
+      h1(paste0("Theme: darkly")),
+      h2("Header 2"),
+      p("Some text") 
+      ) 
     )
   )
-)
-
-server <- function(input, output, session) {
-  output$hist <- renderPlot({
-    means <- replicate(1e4, mean(runif(input$m)))
-    hist(means, breaks = 20)
-  }, res = 96)
-}
-shinyApp(ui, server)
->>>>>>> 761b983793dff642f9d607edc7c8560934298b3b
+shinyApp(ui,server)
