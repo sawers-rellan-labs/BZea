@@ -6,30 +6,43 @@ ui <- fluidPage(
   selectInput("cropID", "Crop Type", 
               c("Maize" = "maize",
                 "Sorghum" = "sorghum")),
-  tableOutput("crop_data")
-    
+  #tableOutput("crop_data"),
+  
+  fluidRow(
+    column(12,
+           DTOutput("crop_data")
+    )
+  ),
 )
 server <- function(input, output, session){
 
-  maize_data <- data.frame(zm)
-  sorghum_data <- data.frame(sb)
-
   datasetInput <- reactive({
     if(input$cropID == "maize"){
-      dataset <- maize_data
+      dataset <- zm
     }
     else if (input$cropID == "sorghum"){
-      dataset <- sorghum_data
+      dataset <- sb
     }
     return(dataset)
   })
+  
   output$crop_data <- renderTable({
     datasetInput()
   })
+  
+  output$table <- renderDT(dataset,
+                           filter = "top",
+                           options = list(
+                             pageLength = 5
+                           )
+  )
+  
   output$mytable1 <- DT::renderDataTable({
     DT::datatable(sorghum, options = list(orderClasses = TRUE))
   })
+
 }
+
 shinyApp(ui, server)
 
 
@@ -37,3 +50,6 @@ shinyApp(ui, server)
 
 
 
+
+
+https://dataviz.shef.ac.uk/blog/05/02/2021/Shiny-Template

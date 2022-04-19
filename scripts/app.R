@@ -34,11 +34,11 @@ invisible(lapply(packages, library, character.only = TRUE))
 #   verbatimTextOutput("summary"),
 #   tableOutput("table")
 # )
-#fluidPage() <-  layout function. Basic visual strucyutre of page
-#selectInput() <-  input control. Let user interact with app by providing a value.
-                  #select box with the label "Dataset" and choose one of built-in dataset
-#verbatimTextoutput and tableOutput <-  output controls where to put rendered output
-                    #verbatrimTextOutput displays code and tableOutput displays tables
+# #fluidPage() <-  layout function. Basic visual strucyutre of page
+# #selectInput() <-  input control. Let user interact with app by providing a value.
+# #select box with the label "Dataset" and choose one of built-in dataset
+# #verbatimTextoutput and tableOutput <-  output controls where to put rendered output
+# #verbatrimTextOutput displays code and tableOutput displays tables
 # server <- function(input, output, session){
 # }
 # shinyApp(ui, server)
@@ -46,38 +46,38 @@ invisible(lapply(packages, library, character.only = TRUE))
 
 #Adding behavior
 # library(shiny)
-ui <- fluidPage(
-  selectInput("dataset", label = "Dataset", choices = ls("package:datasets")),
-  verbatimTextOutput("summary"),
-  tableOutput("table")
-)
+# ui <- fluidPage(
+#   selectInput("dataset", label = "Dataset", choices = ls("package:datasets")),
+#   verbatimTextOutput("summary"),
+#   tableOutput("table")
+# )
+# 
+# server <- function(input, output, session){
+#   output$summary <- renderPrint({
+#     dataset <- get(input$dataset, "package:datasets")
+#     summary(dataset)
+#   })
+#   output$table <- renderTable({
+#     dataset <- get(input$dataset, "package:datasets")
+#     dataset
+#   })
+# }
+# shinyApp(ui, server)
 
-server <- function(input, output, session){
-  output$summary <- renderPrint({
-    dataset <- get(input$dataset, "package:datasets")
-    summary(dataset)
-  })
-  output$table <- renderTable({
-    dataset <- get(input$dataset, "package:datasets")
-    dataset
-  })
-}
-shinyApp(ui, server)
- 
 # #output$ID <- providing the recipe for the Shiny output with that ID
 #             #Right hand side of the assignment uses a render function to wrap some code you provide
 #             #each render{Type} function procdes different output (texts, tables and plots)
 #             # and is paired with {type}Output function
 #             #E.g. renderPrint() is paired with verbatimTextOutput() to display summary with fixed-width (verbatim) text,
 #             # and renderTable() is paired with tableOutput() to show the input data
-# 
-# 
+#
+#
 # shinyApp(ui, server)
 
 
 #Reducing Duplication with Reactive Expressions
 #Reactive expressions
-#A reactive expression only runs the first time it is called, 
+#A reactive expression only runs the first time it is called,
 #and then it caches its result until it needs to be updated
 
 # library(shiny)
@@ -86,7 +86,7 @@ shinyApp(ui, server)
 #   verbatimTextOutput("summary"),
 #   tableOutput("table")
 # )
-# 
+#
 # server <- function(input, output, session){
 #   #create a reactive expression
 #   dataset <- reactive({
@@ -111,7 +111,7 @@ shinyApp(ui, server)
 #   passwordInput("password","Password?"),
 #   textAreaInput("story","Hobbies?", rows = 4)
 # )
-# 
+#
 # shinyApp(ui, server)
 
 
@@ -222,7 +222,7 @@ shinyApp(ui, server)
 # }
 # shinyApp(ui, server)
 
-#renderText() This combines the result into a single string and is usually paired with textOutput() . 
+#renderText() This combines the result into a single string and is usually paired with textOutput() .
 #renderPrint() This prints the result, as if you were in an R console, and is usually paired with verbatimTextOutput()
 
 #Difference between textOutput() and verbatimTextOutput
@@ -238,7 +238,7 @@ shinyApp(ui, server)
 
 
 ##Tables
-#tableOutput() and renderTable() These render a static table of data, showing all the data at once. 
+#tableOutput() and renderTable() These render a static table of data, showing all the data at once.
 #dataTableOutput() and renderDataTable() These render a dynamic table, showing a fixed number of rows along with controls to change which rows are visible.
 
 # ui <- fluidPage(
@@ -280,105 +280,105 @@ shinyApp(ui, server)
 # shinyApp(ui,server)
 
 #Comparing two Data
-# library(ggplot2)
-# freqpoly <- function(x1, x2, binwidth = 0.1, xlim = c(-3, 3)){
-#   df <- data.frame(
-#     x = c(x1, x2),
-#     g = c(rep("x1", length(x1)), rep("x2", length(x2)))
-#   )
-#   ggplot(df, aes(x, colour =g)) +
-#     geom_freqpoly(binwidth = binwidth, size = 1) +
-#     coord_cartesian(xlim = xlim)
-# }
-# 
-# t_test <- function(x1,x2){
-#   test <- t.test(x1,x2)
-#   #use sprintf() to format t.test() results compactly
-#   sprintf(
-#     "p value: %0.3f\n[%0.2f, %0.2f]",
-#     test$p.value, test$conf.int[1], test$conf.int[2]
-#   )
-# }
-# #Stimulated data, use function to compare two variables
-# x1 <- rnorm(100, mean = 0, sd = 0.5)
-# x2 <- rnorm(200, mean = 0.15, sd = 0.9)
-# 
-# freqpoly(x1,x2)
-# cat(t_test(x1, x2))
-# 
-# ui <- fluidPage(
-#   fluidRow(
-#     column(4,
-#            "Distribution 1",
-#            numericInput("n1", label = "n", value = 1000, min = 1),
-#            numericInput("mean1", label = "μ", value =0, step = 0.1),
-#            numericInput("sd1", label = "σ", value = 0.5, min = 0.1, step = 0.1)
-#     ),
-#     column(4,
-#            "Distribution 2",
-#            numericInput("n2", label = "n", value = 1000, min = 1),
-#            numericInput("mean2", label = "μ", value = 0, step = 0.1),
-#            numericInput("sd2", label = "σ", value = 0.5, min = 0.1, step = 0.1)
-#            ),
-#     column (4, 
-#             "Frequency polygon" , 
-#             numericInput ("binwidth" , label = "Bin width" , value = 0.1, step = 0.1), 
-#             sliderInput ("range" , label = "range" , value = c(-3, 3), min = -5, max = 5)
-#     )        
-#   ),
-#   fluidRow(
-#     column(9, plotOutput("hist")),
-#     column(3, verbatimTextOutput("ttest"))
-#   )
-# )
-# 
-# server <- function(input, output, session){
-#   output$hist <- renderPlot({
-#     x1 <- rnorm(input$n1, input$mean1, input$sd1)
-#     x2 <- rnorm(input$n2, input$mean, input$sd2)
-#     
-#     freqpoly(x1, x2, binwidth = input$binwidth, xlim = input$range)
-#   }, res = 96)
-#   output$ttest <- renderText({
-#     x1 <- rnorm(input$n1, input$mean1, input$sd1)
-#     x2 <- rnorm(input$n2, input$mean2, input$sd2)
-#     
-#     t_test(x1, x2)
-#   })
-# }
-# 
-# shinyApp(ui, server)
+library(ggplot2)
+freqpoly <- function(x1, x2, binwidth = 0.1, xlim = c(-3, 3)){
+  df <- data.frame(
+    x = c(x1, x2),
+    g = c(rep("x1", length(x1)), rep("x2", length(x2)))
+  )
+  ggplot(df, aes(x, colour =g)) +
+    geom_freqpoly(binwidth = binwidth, size = 1) +
+    coord_cartesian(xlim = xlim)
+}
+
+t_test <- function(x1,x2){
+  test <- t.test(x1,x2)
+  #use sprintf() to format t.test() results compactly
+  sprintf(
+    "p value: %0.3f\n[%0.2f, %0.2f]",
+    test$p.value, test$conf.int[1], test$conf.int[2]
+  )
+}
+#Stimulated data, use function to compare two variables
+x1 <- rnorm(100, mean = 0, sd = 0.5)
+x2 <- rnorm(200, mean = 0.15, sd = 0.9)
+
+freqpoly(x1,x2)
+cat(t_test(x1, x2))
+
+ui <- fluidPage(
+  fluidRow(
+    column(4,
+           "Distribution 1",
+           numericInput("n1", label = "n", value = 1000, min = 1),
+           numericInput("mean1", label = "μ", value =0, step = 0.1),
+           numericInput("sd1", label = "σ", value = 0.5, min = 0.1, step = 0.1)
+    ),
+    column(4,
+           "Distribution 2",
+           numericInput("n2", label = "n", value = 1000, min = 1),
+           numericInput("mean2", label = "μ", value = 0, step = 0.1),
+           numericInput("sd2", label = "σ", value = 0.5, min = 0.1, step = 0.1)
+           ),
+    column (4,
+            "Frequency polygon" ,
+            numericInput ("binwidth" , label = "Bin width" , value = 0.1, step = 0.1),
+            sliderInput ("range" , label = "range" , value = c(-3, 3), min = -5, max = 5)
+    )
+  ),
+  fluidRow(
+    column(9, plotOutput("hist")),
+    column(3, verbatimTextOutput("ttest"))
+  )
+)
+
+server <- function(input, output, session){
+  output$hist <- renderPlot({
+    x1 <- rnorm(input$n1, input$mean1, input$sd1)
+    x2 <- rnorm(input$n2, input$mean, input$sd2)
+
+    freqpoly(x1, x2, binwidth = input$binwidth, xlim = input$range)
+  }, res = 96)
+  output$ttest <- renderText({
+    x1 <- rnorm(input$n1, input$mean1, input$sd1)
+    x2 <- rnorm(input$n2, input$mean2, input$sd2)
+
+    t_test(x1, x2)
+  })
+}
+
+shinyApp(ui, server)
 
 
 
 
 
 
-##Chapter 4 
+##Chapter 4
 ## Case Study: ER Injuries
 
 ## Getting data
 # dir.create("neiss")
 # download <- function(name) {
-#   url <- "https://github.com/hadley/mastering-shiny/raw/master/neiss/" 
+#   url <- "https://github.com/hadley/mastering-shiny/raw/master/neiss/"
 #   download.file(paste0(url, name), paste0("neiss/", name), quiet = TRUE)
 # }
 # download("injuries.tsv.gz")
 # download("population.tsv")
 # download("products.tsv")
-# 
+#
 # ###Main dataset
 # injuries <- vroom::vroom("neiss/injuries.tsv.gz")
 # injuries
-# 
+#
 # ### Data sets to connect
 # products <- vroom::vroom("neiss/products.tsv")
 # products
-# 
+#
 # population <- vroom::vroom("neiss/population.tsv")
 # population
-# 
-# 
+#
+#
 # ##Explore the data
 # selected <- injuries %>% filter(prod_code == 649)
 # nrow(selected)
@@ -389,25 +389,25 @@ shinyApp(ui, server)
 # summary <- selected %>%
 #   count(age, sex, wt = weight)
 # summary
-# 
+#
 # ###GRAPH
 # summary %>%
 #   ggplot(aes(age, n, colour = sex)) +
 #   geom_line() +
 #   labs(y = "Estimated number of injuries")
-# 
+#
 # ### no. of older people fewer than younger so graph may be wrong. So normalize the data per 10,000
 # summary <- selected %>%
 #   count(age, sex, wt = weight) %>%
 #   left_join(population, by = c("age", "sex")) %>%
 #   mutate(rate = n / population * 1e4)
 # summary
-# 
+#
 # summary %>%
 #   ggplot(aes(age, rate, colour = sex)) +
 #   geom_line(na.rm = TRUE) +
 #   labs(y = "Injuries per 10k people")
-# 
+#
 # ##Making hypothesis: random sample of 10
 # selected %>%
 #   sample_n(10) %>%
@@ -434,30 +434,30 @@ shinyApp(ui, server)
 # )
 
 
-# server <- function(input, output, session) { 
-#   selected <- reactive(injuries %>% filter(prod_code == input$code)) 
-#   
-#   output$diag <- renderTable( 
-#     selected() %>% count(diag, wt = weight, sort = TRUE) 
-#   ) 
-#   output$body_part <- renderTable( 
-#     selected() %>% count(body_part, wt = weight, sort = TRUE) 
-#   ) 
-#   output$location <- renderTable( 
-#     selected() %>% count(location, wt = weight, sort = TRUE) 
-#   ) 
-#   summary <- reactive({ 
-#     selected() %>% 
+# server <- function(input, output, session) {
+#   selected <- reactive(injuries %>% filter(prod_code == input$code))
+#
+#   output$diag <- renderTable(
+#     selected() %>% count(diag, wt = weight, sort = TRUE)
+#   )
+#   output$body_part <- renderTable(
+#     selected() %>% count(body_part, wt = weight, sort = TRUE)
+#   )
+#   output$location <- renderTable(
+#     selected() %>% count(location, wt = weight, sort = TRUE)
+#   )
+#   summary <- reactive({
+#     selected() %>%
 #       count(age, sex, wt = weight) %>%
 #       left_join(population, by = c("age", "sex")) %>%
-#       mutate(rate = n / population * 1e4) 
-#   }) 
-#   
-#   output$age_sex <- renderPlot({ 
+#       mutate(rate = n / population * 1e4)
+#   })
+#
+#   output$age_sex <- renderPlot({
 #     summary() %>%
 #       ggplot(aes(age, n, colour = sex)) +
 #       geom_line() +
-#       labs(y = "Estimated number of injuries") 
+#       labs(y = "Estimated number of injuries")
 #   }, res = 96)
 # }
 
@@ -471,7 +471,7 @@ shinyApp(ui, server)
 #   mutate(diag = fct_lump(fct_infreq(diag), n = 5)) %>%
 #   group_by(diag) %>%
 #   summarize(n = as.integer(sum(weight)))
-# 
+#
 # ## Automate for every variable: a function
 # count_top <- function(df, var, n = 5){
 #   df %>%
@@ -487,25 +487,25 @@ shinyApp(ui, server)
 
 
 
-# server <- function(input, output, session) { 
-#   selected <- reactive(injuries %>% filter(prod_code == input$code)) 
-#   
+# server <- function(input, output, session) {
+#   selected <- reactive(injuries %>% filter(prod_code == input$code))
+#
 #   output$diag <- renderTable(count_top(selected(), diag), width = "100%")
 #   output$body_part <- renderTable(count_top(selected(), body_part), width = "100%")
 #   output$location <- renderTable(count_top(selected(), location), width = "100%")
-#   
-#   summary <- reactive({ 
-#     selected() %>% 
+#
+#   summary <- reactive({
+#     selected() %>%
 #       count(age, sex, wt = weight) %>%
 #       left_join(population, by = c("age", "sex")) %>%
-#       mutate(rate = n / population * 1e4) 
-#   }) 
-#   
-#   output$age_sex <- renderPlot({ 
+#       mutate(rate = n / population * 1e4)
+#   })
+#
+#   output$age_sex <- renderPlot({
 #     summary() %>%
 #       ggplot(aes(age, n, colour = sex)) +
 #       geom_line() +
-#       labs(y = "Estimated number of injuries") 
+#       labs(y = "Estimated number of injuries")
 #   }, res = 96)
 # }
 # shinyApp(ui,server)
@@ -514,33 +514,33 @@ shinyApp(ui, server)
 ##Rate VS Count
 ### give user the choice between visualizing multi plots
 ### Add a control to the UI
-# fluidRow( 
+# fluidRow(
 #   column(8,
 #          selectInput("code", "Product",
 #                      choices = setNames(products$prod_code, products$title),
 #                      width = "100%"
-#                      ) 
-#          ), 
-#   column(2, selectInput("y", "Y axis", c("rate", "count"))) 
+#                      )
+#          ),
+#   column(2, selectInput("y", "Y axis", c("rate", "count")))
 #   ),
 
 
 
-# 
-# 
+#
+#
 # prod_codes <- setNames(products$prod_code, products$title)
 # ui <- fluidPage (
-#   fluidRow( 
+#   fluidRow(
 #     column(8,
 #            selectInput("code", "Product",
 #                        choices = setNames(products$prod_code, products$title),
 #                        width = "100%"
-#            ) 
-#     ), 
-#     column(2, selectInput("y", "Y axis", c("rate", "count"))) 
+#            )
+#     ),
+#     column(2, selectInput("y", "Y axis", c("rate", "count")))
 #   ),
 #   fluidRow(
-#     column(8, 
+#     column(8,
 #            selectInput("code", "Product",
 #                        choices = setNames(products$prod_code, products$title),
 #                        width = "100%"
@@ -579,21 +579,21 @@ shinyApp(ui, server)
 # }, res = 96)
 
 
-# 
-# server <- function(input, output, session) { 
-#   selected <- reactive(injuries %>% filter(prod_code == input$code)) 
-#   
+#
+# server <- function(input, output, session) {
+#   selected <- reactive(injuries %>% filter(prod_code == input$code))
+#
 #   output$diag <- renderTable(count_top(selected(), diag), width = "100%")
 #   output$body_part <- renderTable(count_top(selected(), body_part), width = "100%")
 #   output$location <- renderTable(count_top(selected(), location), width = "100%")
-#   
-#   summary <- reactive({ 
-#     selected() %>% 
+#
+#   summary <- reactive({
+#     selected() %>%
 #       count(age, sex, wt = weight) %>%
 #       left_join(population, by = c("age", "sex")) %>%
-#       mutate(rate = n / population * 1e4) 
-#   }) 
-#   
+#       mutate(rate = n / population * 1e4)
+#   })
+#
 #   output$age_sex <- renderPlot({
 #     if(input$y == "count") {
 #       summary() %>%
@@ -614,31 +614,31 @@ shinyApp(ui, server)
 
 
 
-#Chapter 4 
+#Chapter 4
 ## Case Study: ER Injuries
 
 ## Getting data
 # dir.create("neiss")
 # download <- function(name) {
-#   url <- "https://github.com/hadley/mastering-shiny/raw/master/neiss/" 
+#   url <- "https://github.com/hadley/mastering-shiny/raw/master/neiss/"
 #   download.file(paste0(url, name), paste0("neiss/", name), quiet = TRUE)
 # }
 # download("injuries.tsv.gz")
 # download("population.tsv")
 # download("products.tsv")
-# 
+#
 # ###Main dataset
 # injuries <- vroom::vroom("neiss/injuries.tsv.gz")
 # injuries
-# 
+#
 # ### Data sets to connect
 # products <- vroom::vroom("neiss/products.tsv")
 # products
-# 
+#
 # population <- vroom::vroom("neiss/population.tsv")
 # population
-# 
-# 
+#
+#
 # ##Explore the data
 # selected <- injuries %>% filter(prod_code == 649)
 # nrow(selected)
@@ -649,25 +649,25 @@ shinyApp(ui, server)
 # summary <- selected %>%
 #   count(age, sex, wt = weight)
 # summary
-# 
+#
 # ###GRAPH
 # summary %>%
 #   ggplot(aes(age, n, colour = sex)) +
 #   geom_line() +
 #   labs(y = "Estimated number of injuries")
-# 
+#
 # ### no. of older people fewer than younger so graph may be wrong. So normalize the data per 10,000
 # summary <- selected %>%
 #   count(age, sex, wt = weight) %>%
 #   left_join(population, by = c("age", "sex")) %>%
 #   mutate(rate = n / population * 1e4)
 # summary
-# 
+#
 # summary %>%
 #   ggplot(aes(age, rate, colour = sex)) +
 #   geom_line(na.rm = TRUE) +
 #   labs(y = "Injuries per 10k people")
-# 
+#
 # ##Making hypothesis: random sample of 10
 # selected %>%
 #   sample_n(10) %>%
@@ -677,31 +677,31 @@ shinyApp(ui, server)
 #Prototype
 
 
-#Chapter 4 
+#Chapter 4
 ## Case Study: ER Injuries
 
 ## Getting data
 # dir.create("neiss")
 # download <- function(name) {
-#   url <- "https://github.com/hadley/mastering-shiny/raw/master/neiss/" 
+#   url <- "https://github.com/hadley/mastering-shiny/raw/master/neiss/"
 #   download.file(paste0(url, name), paste0("neiss/", name), quiet = TRUE)
 # }
 # download("injuries.tsv.gz")
 # download("population.tsv")
 # download("products.tsv")
-# 
+#
 # ###Main dataset
 # injuries <- vroom::vroom("neiss/injuries.tsv.gz")
 # injuries
-# 
+#
 # ### Data sets to connect
 # products <- vroom::vroom("neiss/products.tsv")
 # products
-# 
+#
 # population <- vroom::vroom("neiss/population.tsv")
 # population
-# 
-# 
+#
+#
 # ##Explore the data
 # selected <- injuries %>% filter(prod_code == 649)
 # nrow(selected)
@@ -712,25 +712,25 @@ shinyApp(ui, server)
 # summary <- selected %>%
 #   count(age, sex, wt = weight)
 # summary
-# 
+#
 # ###GRAPH
 # summary %>%
 #   ggplot(aes(age, n, colour = sex)) +
 #   geom_line() +
 #   labs(y = "Estimated number of injuries")
-# 
+#
 # ### no. of older people fewer than younger so graph may be wrong. So normalize the data per 10,000
 # summary <- selected %>%
 #   count(age, sex, wt = weight) %>%
 #   left_join(population, by = c("age", "sex")) %>%
 #   mutate(rate = n / population * 1e4)
 # summary
-# 
+#
 # summary %>%
 #   ggplot(aes(age, rate, colour = sex)) +
 #   geom_line(na.rm = TRUE) +
 #   labs(y = "Injuries per 10k people")
-# 
+#
 # ##Making hypothesis: random sample of 10
 # selected %>%
 #   sample_n(10) %>%
@@ -751,7 +751,7 @@ shinyApp(ui, server)
 
 ##Chapter 6
 ##Layout, Themes, HTML
-# 
+#
 # fluidPage(
 #   titlePanel(
 #     #app title/description
@@ -778,7 +778,7 @@ shinyApp(ui, server)
 #     )
 #   )
 # )
-# 
+#
 # server <- function(input, output, session) {
 #   output$hist <- renderPlot({
 #     means <- replicate(1e4, mean(runif(input$m)))
@@ -788,7 +788,7 @@ shinyApp(ui, server)
 # shinyApp(ui, server)
 
 
-# Multi Page 
+# Multi Page
 # fluidPage(
 #   titlePanel(
 #     #app title/description
@@ -815,7 +815,7 @@ shinyApp(ui, server)
 #     )
 #   )
 # )
-# 
+#
 # server <- function(input, output, session) {
 #   output$hist <- renderPlot({
 #     means <- replicate(1e4, mean(runif(input$m)))
@@ -826,22 +826,22 @@ shinyApp(ui, server)
 
 
 #Multirow
-# fluidPage( 
-#   fluidRow( 
+# fluidPage(
+#   fluidRow(
 #     column(4,
-#            ... 
-#            ), 
+#            ...
+#            ),
 #     column(8,
-#            .. 
-#            ) 
-#     ), 
-#   fluidRow( 
+#            ..
+#            )
+#     ),
+#   fluidRow(
 #     column(6,
-#            ... 
-#            ), 
+#            ...
+#            ),
 #     column(6,
-#            ... 
-#            ) 
+#            ...
+#            )
 #     )
 # )
 
@@ -861,8 +861,8 @@ shinyApp(ui, server)
 #     tabPanel("Visualize results")
 #   )
 # )
-# 
-# shinyApp(ui,server)     
+#
+# shinyApp(ui,server)
 
 
 ###which tab selected use id argument to tabsetPanel()
@@ -921,18 +921,18 @@ shinyApp(ui, server)
 
 #Shiny Themes
 
-# ui <- fluidPage( 
-#   theme = bslib::bs_theme(bootswatch = "darkly"), 
-#   sidebarLayout( 
+# ui <- fluidPage(
+#   theme = bslib::bs_theme(bootswatch = "darkly"),
+#   sidebarLayout(
 #     sidebarPanel(
 #       textInput("txt", "Text input:", "text here"),
-#       sliderInput("slider", "Slider input:", 1, 100, 30) 
-#       ), 
+#       sliderInput("slider", "Slider input:", 1, 100, 30)
+#       ),
 #     mainPanel(
 #       h1(paste0("Theme: darkly")),
 #       h2("Header 2"),
-#       p("Some text") 
-#       ) 
+#       p("Some text")
+#       )
 #     )
 #   )
 # shinyApp(ui,server)
@@ -944,10 +944,10 @@ shinyApp(ui, server)
 #   titlePanel("A themed plot"),
 #   plotOutput("plot")
 # )
-# 
+#
 # server <- function(input, output, session){
 #   thematic::thematic_shiny()
-#   
+#
 #   output$plot <- renderPlot({
 #     ggplot(mtcars, aes(wt, mpg)) +
 #       geom_point() +
@@ -955,23 +955,20 @@ shinyApp(ui, server)
 #   }, res = 96)
 # }
 # shinyApp(ui, server)
-=======
-ui <- fluidPage( 
-  theme = bslib::bs_theme(bootswatch = "darkly"), 
-  sidebarLayout( 
-    sidebarPanel(
-      textInput("txt", "Text input:", "text here"),
-      sliderInput("slider", "Slider input:", 1, 100, 30) 
-      ), 
-    mainPanel(
-      h1(paste0("Theme: darkly")),
-      h2("Header 2"),
-      p("Some text") 
-      ) 
-    )
-  )
-shinyApp(ui,server)
-=======
 
->>>>>>> 7c5661f0038dd237e69d0deb892615976efa6a90
->>>>>>> b862989e693fc384b04366677da1cae59df1903a
+# ui <- fluidPage(
+#   theme = bslib::bs_theme(bootswatch = "darkly"),
+#   sidebarLayout(
+#     sidebarPanel(
+#       textInput("txt", "Text input:", "text here"),
+#       sliderInput("slider", "Slider input:", 1, 100, 30)
+#       ),
+#     mainPanel(
+#       h1(paste0("Theme: darkly")),
+#       h2("Header 2"),
+#       p("Some text")
+#       )
+#     )
+#   )
+# shinyApp(ui,server)
+# 
