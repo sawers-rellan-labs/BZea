@@ -45,9 +45,9 @@ server <- function(input, output, session){
 
 shinyApp(ui, server)
 
+?paste()
 
-
-
+y
 
 
 
