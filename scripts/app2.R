@@ -4,7 +4,7 @@ library(shiny)
 ui <- fluidPage(
   
   # App title ----
-  titlePanel("Dataset"),
+  titlePanel("Alvarez Lines"),
   
   # Sidebar layout with input and output definitions ----
   sidebarLayout(
@@ -20,14 +20,19 @@ ui <- fluidPage(
       # br() element to introduce extra vertical spacing ----
       br(),
       
-      # Input: Slider for the number of observations to generate ----
+      # Input: Slider for the Phosphorus and Altitude ----
       sliderInput("n",
-                  "Number of observations:",
-                  value = 500,
+                  "Phosphorus content:",
+                  value = 1,
                   min = 1,
-                  max = 1000)
-      
-    ),
+                  max = 100),
+      sliderInput("n.a",
+                "Altitude:",
+                value = 1,
+                min = 1,
+                max = 5000)
+    
+  ),
     
     # Main panel for displaying outputs ----
     mainPanel(
