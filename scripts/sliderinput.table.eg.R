@@ -1,11 +1,9 @@
-library(shiny)
-library(shinyWidgets)
-install.packages("shinyWidgets")
-library(datamods)
-install.packages("datamods")
-library(MASS)
-
-# Add some NAs to mpg
+# library(shiny)
+# library(shinyWidgets)
+# library(datamods)
+# library(MASS)
+# 
+# # Add some NAs to mpg
 mtcars_na <- mtcars
 mtcars_na[] <- lapply(
   X = mtcars_na,
@@ -14,6 +12,7 @@ mtcars_na[] <- lapply(
     x
   }
 )
+
 
 datetime <- data.frame(
   date = seq(Sys.Date(), by = "day", length.out = 300),
@@ -119,5 +118,4 @@ server <- function(input, output, session) {
   
 }
 
-if (interactive())
-  shinyApp(ui, server)
+shinyApp(ui, server)
