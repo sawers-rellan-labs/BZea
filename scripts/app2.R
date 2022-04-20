@@ -1,5 +1,5 @@
 #Packages required
-# packages <- (c( "shiny","gapminder", "ggforce", "gh", "globals", "openintro", "profvis", "RSQLite", "shiny", "shinycssloaders", "shinyFeedback", "shinythemes", "testthat", "thematic", "tidyverse", "vroom", "waiter", "xml2", "zeallot","shinydashboard","shinydashboardPlus","shinyalert","shinyjs"))
+#packages <- (c( "shiny","gapminder", "ggforce", "gh", "globals", "openintro", "profvis", "RSQLite", "shiny", "shinycssloaders", "shinyFeedback", "shinythemes", "testthat", "thematic", "tidyverse", "vroom", "waiter", "xml2", "zeallot","shinydashboard","shinydashboardPlus","shinyalert","shinyjs"))
 
 # Install packages not yet installed
 #installed_packages <- packages %in% rownames(installed.packages())
@@ -8,11 +8,15 @@
 #}
 
 #Loading packages
-# invisible(lapply(packages, library, character.only = TRUE))
+#invisible(lapply(packages, library, character.only = TRUE))
 
 #Loading Data Table
 # sb <- vroom::vroom("Data/data.csv")
 # zm <- vroom::vroom("Data/data2.csv")
+sb <- read.table("Data/data.csv", sep=",")
+zm <- read.table("Data/data2.csv", sep=",")
+
+
 
 
 # Define UI for random distribution app ----
@@ -92,6 +96,12 @@ server <- function(input,output){
   output$table <- renderTable({
     df()
   })
+  
+  # output$table <- renderTable({
+  #   df<- df[df$Year >= input$range.phosphoruss[1] & df$Phosphorus <= input$range.phosphorus[2],]
+  #   df[,c(Phosphorus,input$dist)]
+  # },include.rownames=FALSE)
+  
   
   # Generate a plot of the data ----
   # Also uses the inputs to build the plot label. Note that the
