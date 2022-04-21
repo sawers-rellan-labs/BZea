@@ -1,22 +1,31 @@
 #Packages required
-# packages <- (c( "shiny","gapminder", "ggforce", "gh", "globals", "openintro", "profvis", "RSQLite", "shiny", "shinycssloaders", "shinyFeedback", "shinythemes", "testthat", "thematic", "tidyverse", "vroom", "waiter", "xml2", "zeallot","shinydashboard","shinydashboardPlus","shinyalert","shinyjs"))
+#packages <- (c( "shiny","gapminder", "ggforce", "gh", "globals", "openintro", "profvis", "RSQLite", "shiny", "shinycssloaders", "shinyFeedback", "shinythemes", "testthat", "thematic", "tidyverse", "vroom", "waiter", "xml2", "zeallot","shinydashboard","shinydashboardPlus","shinyalert","shinyjs","shinyWidgets","datamods", "MASS"))
 
 # Install packages not yet installed
-#installed_packages <- packages %in% rownames(installed.packages())
-#if (any(installed_packages == FALSE)) {
-#  install.packages(packages[!installed_packages])
-#}
+# installed_packages <- packages %in% rownames(installed.packages())
+# if (any(installed_packages == FALSE)) {
+# install.packages(packages[!installed_packages])
+#  }
 
 #Loading packages
-# invisible(lapply(packages, library, character.only = TRUE))
+#invisible(lapply(packages, library, character.only = TRUE))
 
 #Loading Data Table
-# sb <- vroom::vroom("Data/data.csv")
-# zm <- vroom::vroom("Data/data2.csv")
+#sb <- vroom::vroom("Data/data.csv")
+#zm <- vroom::vroom("Data/data2.csv")
 #sb <- read.table("Data/data.csv", sep=",")
 #zm <- read.table("Data/data2.csv", sep=",")
 
 
+datetime <- data.frame(
+  date = seq(Sys.Date(), by = "day", length.out = 300),
+  datetime = seq(Sys.time(), by = "hour", length.out = 300),
+  num = sample.int(1e5, 300)
+)
+
+one_column_numeric <- data.frame(
+  var1 = rnorm(100)
+)
 
 
 # Define UI for random distribution app ----
@@ -93,6 +102,47 @@ server <- function(input,output){
   data <- reactive({
     get(input$dataset)
   })
+  ?filter_data_server()
+  res_filter <- filter_data_server(
+    id = "filtering",
+    data = data,
+    name = reactive(input$dataset),
+    vars = vars,
+    widget_num = "slider",
+    widget_date = "slider",
+    label_na = "Missing"
+  )
+  
+  observeEvent(res_filter$filtered(), {
+    updateProgressBar(
+      session = session, id = "pbar",
+      value = nrow(res_filter$filtered()), total = nrow(data())
+    )
+  })
+  df <- eventReactive(input$dist, {
+    if(input$dist == "zm"){
+      data_internal <- zm
+    } else {
+      data_internal <- sb
+    }
+  })
+
+  
+  output$table <- DT::renderDT({
+    res_filter$filtered(df())
+  }, options = list(pageLength = 5))
+  
+  output$code_dplyr <- renderPrint({
+    res_filter$code()
+  })
+  output$code <- renderPrint({
+    res_filter$expr()
+  })
+  
+  output$res_str <- renderPrint({
+    str(res_filter$filtered())
+  })
+  
   
   # Reactive expression to generate the requested distribution ----
   # This is called whenever the inputs change. The output functions
@@ -106,17 +156,17 @@ server <- function(input,output){
   # })
   
   # Generate a table view of the data ----
-  df <- eventReactive(input$dist, {
-    if(input$dist == "zm"){
-      data_internal <- zm
-    } else {
-      data_internal <- sb
-    }
-  })
-  
-  output$table <- renderTable({
-    df()
-  })
+  # df <- eventReactive(input$dist, {
+  #   if(input$dist == "zm"){
+  #     data_internal <- zm
+  #   } else {
+  #     data_internal <- sb
+  #   }
+  # })
+  # 
+  # output$table <- renderTable({
+  #   df()
+  # })
   
   # output$table <- renderTable({
   #   df<- df[df$Year >= input$range.phosphoruss[1] & df$Phosphorus <= input$range.phosphorus[2],]
@@ -129,15 +179,15 @@ server <- function(input,output){
   # dependencies on the inputs and the data reactive expression are
   # both tracked, and all expressions are called in the sequence
   # implied by the dependency graph.
-  output$p.plot <- renderPlot({
-    dist <- input$dist
-    p.plot = dist$Phosphorus
-    
-    hist(d(),
-         main = paste("r", dist, "(", n, ")", sep = ""),
-         col = "#75AADB", border = "white")
-  })
-  
+  # output$p.plot <- renderPlot({
+  #   dist <- input$dist
+  #   p.plot = dist$Phosphorus
+  #   
+  #   hist(d(),
+  #        main = paste("r", dist, "(", n, ")", sep = ""),
+  #        col = "#75AADB", border = "white")
+  # })
+  # 
 }
 
 shinyApp(ui,server)
