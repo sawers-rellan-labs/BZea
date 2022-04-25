@@ -25,14 +25,13 @@ ui <- fluidPage(
         total = 100, display_pct = TRUE
       ),
       DT::dataTableOutput(outputId = "table"),
-      
       plotOutput("plot.alt"),
-      plotOutput("plot.phos"),
-      plotOutput("plot.long.lat")
-      
+      plotOutput("plot.phos")
       
     )
-  )
+  ),
+  
+  
 )
 
 #Server
@@ -79,11 +78,15 @@ server <- function(input, output, session) {
 
   output$plot.alt = renderPlot({
     ggplot(res_filter$filtered(), aes(x = Altitude)) +
-           geom_histogram()
+           geom_histogram(color="black", fill="white") +
+      geom_vline(aes(xintercept=mean(Altitude)),
+                    color="blue", linetype="dashed", size=1)
   })
   output$plot.phos = renderPlot({
     ggplot(res_filter$filtered(), aes(x = Phosphorus)) +
-      geom_histogram()
+      geom_histogram(color="black", fill="white") +
+      geom_vline(aes(xintercept=mean(Phosphorus)),
+                 color="blue", linetype="dashed", size=1)
   })
   
 }
