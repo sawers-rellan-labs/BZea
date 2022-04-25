@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #Data Management
 zm.donor <- unique(zm$Donor_accession)
 draw_plot <- function(plot_donor){
@@ -7,6 +8,8 @@ draw_plot <- function(plot_donor){
     geom_histogram()
 }
 
+=======
+>>>>>>> f69b51adb9b2cc2b1b91cb5ebad50ca0b81d7f76
 #UI
 ui <- fluidPage(
   tags$h2("The Alvarez Lines"),
