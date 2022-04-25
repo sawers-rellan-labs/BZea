@@ -26,6 +26,7 @@ ui <- fluidPage(
         total = 100, display_pct = TRUE
       ),
       DT::dataTableOutput(outputId = "table"),
+      
       plotOutput("plot.alt"),
       plotOutput("plot.phos")
       
