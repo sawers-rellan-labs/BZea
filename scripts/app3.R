@@ -7,7 +7,8 @@ ui <- fluidPage(
     inputId = "dataset",
     label = "Data:",
     choices = c("Maize" = "zm",
-                "Sorghum" = "sb"
+                "Lasky" = "sb",
+                "SAP" = "sap"
       
     ),
     inline = TRUE
