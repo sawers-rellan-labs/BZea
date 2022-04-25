@@ -1,17 +1,6 @@
-<<<<<<< HEAD
-#Data Management
-zm.donor <- unique(zm$Donor_accession)
-draw_plot <- function(plot_donor){
-  filtered_donor <- zm %>%
-    filter(Donor_accession == !!plot_donor)
-  ggplot(filtered_donor, aes(Donor)) +
-    geom_histogram()
-}
-
-=======
->>>>>>> f69b51adb9b2cc2b1b91cb5ebad50ca0b81d7f76
 #UI
 ui <- fluidPage(
+  theme = bslib::bs_theme(bootswatch = "sandstone"),
   tags$h2("The Alvarez Lines"),
   
   radioButtons(
@@ -35,8 +24,13 @@ ui <- fluidPage(
         id = "pbar", value = 100,
         total = 100, display_pct = TRUE
       ),
-      DT::dataTableOutput(outputId = "table")
-     
+      DT::dataTableOutput(outputId = "table"),
+      
+      plotOutput("plot.alt"),
+      plotOutput("plot.phos"),
+      plotOutput("plot.long.lat")
+      
+      
     )
   )
 )
@@ -82,6 +76,15 @@ server <- function(input, output, session) {
   output$table <- DT::renderDT({
     res_filter$filtered()
   }, options = list(pageLength = 10))
+
+  output$plot.alt = renderPlot({
+    ggplot(res_filter$filtered(), aes(x = Altitude)) +
+           geom_histogram()
+  })
+  output$plot.phos = renderPlot({
+    ggplot(res_filter$filtered(), aes(x = Phosphorus)) +
+      geom_histogram()
+  })
   
 }
 
