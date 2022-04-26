@@ -6,7 +6,7 @@ ui <- fluidPage(
   radioButtons(
     inputId = "dataset",
     label = "Data:",
-    choices = c("Maize" = "zm",
+    choices = c("Maize-Metadata.R2" = "zm",
                 "Lasky_sorghum" = "sb",
                 "Sorghum Association Panel" = "sap"
       
