@@ -27,8 +27,12 @@ ui <- fluidPage(
       ),
       DT::dataTableOutput(outputId = "table"),
       
-      plotOutput("plot.alt"),
-      plotOutput("plot.phos")
+      fluidRow(
+        splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot.alt"), plotOutput("plot.phos"))
+      )
+      
+      # plotOutput("plot.alt"),
+      # plotOutput("plot.phos")
       
     )
   ),
@@ -74,6 +78,7 @@ server <- function(input, output, session) {
     )
   })
   
+  
   output$table <- DT::renderDT({
     res_filter$filtered()
   }, options = list(pageLength = 10))
@@ -90,6 +95,8 @@ server <- function(input, output, session) {
       geom_vline(aes(xintercept=mean(Phosphorus)),
                  color="blue", linetype="dashed", size=1)
   })
+  
+ 
   
 }
 
