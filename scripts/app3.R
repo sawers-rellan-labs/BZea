@@ -29,10 +29,10 @@ ui <- fluidPage(
       
       fluidRow(
         splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot.alt"), plotOutput("plot.phos"))
-      )
+      ),
       
-      # plotOutput("plot.alt"),
-      # plotOutput("plot.phos")
+      plotOutput("map")
+     
       
     )
   ),
@@ -81,7 +81,7 @@ server <- function(input, output, session) {
   
   output$table <- DT::renderDT({
     res_filter$filtered()
-  }, options = list(pageLength = 10))
+  }, options = list(pageLength = 5))
 
   output$plot.alt = renderPlot({
     ggplot(res_filter$filtered(), aes(x = Altitude)) +
@@ -96,7 +96,10 @@ server <- function(input, output, session) {
                  color="blue", linetype="dashed", size=1)
   })
   
- 
+  mapWorld <- borders("world", colour="gray50", fill="white")
+  output$map = renderPlot({
+    ggplot( ) + mapWorld + geom_point(data = res_filter$filtered(), aes(x = Longitude, y = Latitude, color = Country), alpha = 0.5)
+ })
   
 }
 
