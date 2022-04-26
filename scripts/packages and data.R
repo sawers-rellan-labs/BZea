@@ -1,5 +1,5 @@
 #Packages required
-packages <- (c( "shiny","gapminder", "ggforce", "gh", "globals", "openintro", "profvis", "RSQLite", "shiny", "shinycssloaders", "shinyFeedback", "shinythemes", "testthat", "thematic", "tidyverse", "vroom", "waiter", "xml2", "zeallot","shinydashboard","shinydashboardPlus","shinyalert","shinyjs","shinyWidgets","datamods", "MASS","ggplot2","dplyr","ggmap","maptools","maps"))
+packages <- (c( "shiny","gapminder", "ggforce", "gh", "globals", "openintro", "profvis", "RSQLite", "shiny", "shinycssloaders", "shinyFeedback", "shinythemes", "testthat", "thematic", "tidyverse", "vroom", "waiter", "xml2", "zeallot","shinydashboard","shinydashboardPlus","shinyalert","shinyjs","shinyWidgets","datamods", "MASS","ggplot2","dplyr","ggmap","maptools","maps", "Cairo"))
 
 # Install packages not yet installed
 # installed_packages <- packages %in% rownames(installed.packages())

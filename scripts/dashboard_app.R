@@ -62,7 +62,7 @@ ui <-  dashboardPage(
       
       # Fourth tab content
       tabItem(tabName = "map",
-              plotOutput("map")
+              plotOutput("map", height = 700, dblclick = "map_dblclick", brush = brushOpts(id = "map_brush", resetOnNew =  TRUE))
       )
       
       
@@ -78,6 +78,8 @@ server <- function(input, output, session){
   data <- reactive({
     get(input$dataset)
   })
+  
+  ranges <- reactiveValues(x = NULL, y = NULL)
   
   vars <- reactive({
     if (identical(input$dataset, "mtcars")) {
@@ -129,7 +131,20 @@ server <- function(input, output, session){
   
   mapWorld <- borders("world", colour="gray50", fill="white")
   output$map = renderPlot({
-    ggplot( ) + mapWorld + geom_point(data = res_filter$filtered(), aes(x = Longitude, y = Latitude, color = Country), alpha = 0.5)
+    ggplot( ) + mapWorld + geom_point(data = res_filter$filtered(), aes(x = Longitude, y = Latitude, color = Country), alpha = 0.5) +
+      coord_cartesian(xlim = ranges$x, ylim = ranges$y, expand = FALSE)
+  })
+  
+  observeEvent(input$map_dblclick, {
+    brush <- input$map_brush
+    if (!is.null(brush)) {
+      ranges$x <- c(brush$xmin, brush$xmax)
+      ranges$y <- c(brush$ymin, brush$ymax)
+      
+    } else {
+      ranges$x <- NULL
+      ranges$y <- NULL
+    }
   })
   
   output$code_dplyr <- renderPrint({
@@ -143,6 +158,10 @@ server <- function(input, output, session){
     str(res_filter$filtered())
   })
   
+
+  
 }
 
 shinyApp(ui, server)
+
+
