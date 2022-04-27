@@ -62,7 +62,14 @@ ui <-  dashboardPage(
       
       # Fourth tab content
       tabItem(tabName = "map",
-              plotOutput("map", height = 700, dblclick = "map_dblclick", brush = brushOpts(id = "map_brush", resetOnNew =  TRUE))
+              plotOutput("map", height = 700, dblclick = "map_dblclick", brush = brushOpts(id = "map_brush", resetOnNew =  TRUE)),
+              "Drag and double click to zoom"
+      ),
+      
+      
+      # Fifth tab content
+      tabItem(tabName = "download",
+              downloadButton('downloads',"Download the data"),
       )
       
       
@@ -157,6 +164,14 @@ server <- function(input, output, session){
   output$res_str <- renderPrint({
     str(res_filter$filtered())
   })
+  
+  output$downloads <- downloadHandler(
+    filename = function(){"table.csv"}, 
+    content = function(fname){
+      write.csv(data, fname)
+    }
+  )
+  
   
 
   
