@@ -31,7 +31,7 @@ ui <-  dashboardPage(
                 fluidRow(
                   column(
                     width = 5,
-                    filter_data_ui("filtering", max_height = "500px")
+                    filter_data_ui("filtering", max_height = "600px")
                   ),
                   column(
                     width = 7,
@@ -43,7 +43,7 @@ ui <-  dashboardPage(
                   tags$b("Expression:"),
                   verbatimTextOutput(outputId = "code"),
                   tags$b("Filtered data:"),
-                  verbatimTextOutput(outputId = "res_str")
+                  verbatimTextOutput(outputId = "res_str" )
               )
             )
       ),
