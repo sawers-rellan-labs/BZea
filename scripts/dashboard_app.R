@@ -1,21 +1,25 @@
 ## ui.R ##
 ui <-  dashboardPage(
-  dashboardHeader(title = "The Alvarez Lines"),
+  
+  dashboardHeader(title = "The GEMMA Lab- Genetics, Evolution and Metabolism of Maize Adaptation Lab",
+                  titleWidth = 700),
   
   dashboardSidebar(
     sidebarMenu(
+      menuItem("Data", tabName = "data", icon = icon("database")),
       menuItem("Filter", tabName = "filter", icon = icon("filter")),
       menuItem("Table", tabName = "table", icon = icon("table")),
       menuItem("Chart", tabName = "plots", icon = icon("chart-area")),
       menuItem("Map", tabName = "map", icon = icon("globe")),
-      menuItem("Download", tabName = "download", icon = icon("download"))
+      menuItem("Download", tabName = "download", icon = icon("download")),
+      menuItem("About us", tabName = "about_us", icon = icon("user"))
     )
   ),
   
   dashboardBody(
     tabItems(
-      # First tab content
-      tabItem(tabName = "filter",
+      #First tab-data content
+      tabItem(tabName = "data",
               fluidPage(
                 radioButtons(
                   inputId = "dataset",
@@ -25,9 +29,15 @@ ui <-  dashboardPage(
                               "Sorghum Association Panel" = "sap"
                               
                   ),
-                  inline = TRUE
+                  inline = FALSE
                 ),
-                
+              )
+      ),
+      
+      
+      # Second tab content
+      tabItem(tabName = "filter",
+              fluidPage(
                 fluidRow(
                   column(
                     width = 5,
