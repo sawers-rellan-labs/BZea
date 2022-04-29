@@ -1,8 +1,7 @@
 ## ui.R ##
 ui <-  dashboardPage(
   
-  dashboardHeader(title = "The GEMMA Lab- Genetics, Evolution and Metabolism of Maize Adaptation Lab",
-                  titleWidth = 700),
+  dashboardHeader(title =  "The GEMMA Lab"),
   
   dashboardSidebar(
     sidebarMenu(
@@ -17,6 +16,9 @@ ui <-  dashboardPage(
   ),
   
   dashboardBody(
+    #shinyDashboardThemes(
+    #  theme = "grey_dark"
+    #),
     tabItems(
       #First tab-data content
       tabItem(tabName = "data",
@@ -188,5 +190,6 @@ server <- function(input, output, session){
 }
 
 shinyApp(ui, server)
+
 
 
