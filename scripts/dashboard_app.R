@@ -1,7 +1,7 @@
 ## ui.R ##
 ui <-  dashboardPage(
   
-  dashboardHeader(title =  "The GEMMA Lab"),
+  dashboardHeader(title =  "Crop Hub"),
   
   dashboardSidebar(
     sidebarMenu(
