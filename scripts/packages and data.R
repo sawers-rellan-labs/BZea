@@ -12,5 +12,5 @@ invisible(lapply(packages, library, character.only = TRUE))
 
 #Loading Data Table
 sb <- vroom::vroom("Data/data.csv")
-zm <- vroom::vroom("Data/metadata.R2.teo.csv")
+zm <- vroom::vroom("Data/B73xTEO-LR-Pops-Metadata_all.csv")
 sap <- vroom::vroom("Data/SAP.csv")

@@ -26,9 +26,8 @@ ui <-  dashboardPage(
                 radioButtons(
                   inputId = "dataset",
                   label = "Data:",
-                  choices = c("Maize-Metadata.R2" = "zm",
-                              "Lasky_sorghum" = "sb",
-                              "Sorghum Association Panel" = "sap"
+                  choices = c("B73xTEO-LR-Pops-Metadata" = "zm"
+                              
                               
                   ),
                   inline = FALSE
@@ -150,7 +149,7 @@ server <- function(input, output, session){
   
   mapWorld <- borders("world", colour="gray50", fill="white")
   output$map = renderPlot({
-    ggplot( ) + mapWorld + geom_point(data = res_filter$filtered(), aes(x = Longitude, y = Latitude, color = Country), alpha = 0.5) +
+    ggplot( ) + mapWorld + geom_point(data = res_filter$filtered(), aes(x = Longitude, y = Latitude, color = Race), alpha = 0.5) +
       coord_cartesian(xlim = ranges$x, ylim = ranges$y, expand = FALSE)
   })
   
