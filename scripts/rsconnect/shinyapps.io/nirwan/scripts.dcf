@@ -1,0 +1,13 @@
+name: scripts
+title: scripts
+username:
+account: nirwan
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 6264390
+bundleId: 5887165
+url: https://nirwan.shinyapps.io/scripts/
+when: 1652108285.37053
+lastSyncTime: 1652108285.37055
+asMultiple: FALSE
+asStatic: FALSE

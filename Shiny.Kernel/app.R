@@ -1,23 +1,50 @@
-#Packages required
-packages <- (c( "shiny","gapminder", "ggforce", "gh", "globals", "openintro", "profvis", "RSQLite", "shiny", "shinycssloaders", "shinyFeedback", "shinythemes", "testthat", "thematic", "tidyverse", "vroom", "waiter", "xml2", "zeallot","shinydashboard","shinydashboardPlus","shinyalert","shinyjs","shinyWidgets","datamods", "MASS","ggplot2","dplyr","ggmap","maptools","maps", "Cairo","dashboardthemes"))
+#
+# This is a Shiny web application. You can run the application by clicking
+# the 'Run App' button above.
+#
+# Find out more about building applications with Shiny here:
+#
+#    http://shiny.rstudio.com/
+#
 
-# Install packages not yet installed
-# installed_packages <- packages %in% rownames(installed.packages())
-# if (any(installed_packages == FALSE)) {
-# install.packages(packages[!installed_packages])
-#  }
-
-#Loading packages
-invisible(lapply(packages, library, character.only = TRUE))
+library(shiny)
+library(gapminder)
+library(ggforce)
+library(gh)
+library(globals)
+library(openintro)
+library(profvis)
+library(RSQLite)
+library(shinycssloaders)
+library(shinyFeedback)
+library(shinythemes)
+library(testthat)
+library(thematic)
+library(tidyverse)
+library(vroom)
+library(waiter)
+library(xml2)
+library(zeallot)
+library(shinydashboard)
+library(shinydashboardPlus)
+library(shinyalert)
+library(shinyjs)
+library(shinyWidgets)
+library(datamods)
+library(MASS)
+library(ggplot2)
+library(dplyr)
+library(ggmap)
+library(maptools)
+library(maps)
+library(dashboardthemes)
 
 #Loading Data Table
 sb <- vroom::vroom("Data/data.csv")
 zm <- vroom::vroom("Data/B73xTEO-LR-Pops-Metadata_all.csv")
 sap <- vroom::vroom("Data/SAP.csv")
 
-rsconnect::setAccountInfo(name='nirwan', token='A823D3EA9A01B51D392435197701FD97', secret='MrDswWHuKXbuBT37/4PLi6SNBarvdz6F37gX+RLk')
-
-## ui.R ##
+# Define UI for application that draws a histogram
 ui <-  dashboardPage(
   
   dashboardHeader(title =  "Crop Hub"),
@@ -74,8 +101,8 @@ ui <-  dashboardPage(
                   verbatimTextOutput(outputId = "code"),
                   tags$b("Filtered data:"),
                   verbatimTextOutput(outputId = "res_str" )
+                )
               )
-            )
       ),
       
       # Second tab content
@@ -131,7 +158,7 @@ server <- function(input, output, session){
       NULL
     }
   })
-
+  
   res_filter <- filter_data_server(
     id = "filtering",
     data = data,
@@ -141,14 +168,14 @@ server <- function(input, output, session){
     widget_date = "slider",
     label_na = "Missing"
   )
-   
+  
   observeEvent(res_filter$filtered(), {
     updateProgressBar(
       session = session, id = "pbar",
       value = nrow(res_filter$filtered()), total = nrow(data())
     )
   })
-   
+  
   output$table <- DT::renderDT({
     res_filter$filtered()
   }, options = list(pageLength = 25))
@@ -203,7 +230,7 @@ server <- function(input, output, session){
   )
   
   
-
+  
   
 }
 

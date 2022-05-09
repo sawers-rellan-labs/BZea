@@ -1,0 +1,13 @@
+name: Trial
+title: Trial
+username:
+account: nirwan
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 6264663
+bundleId: 5887301
+url: https://nirwan.shinyapps.io/Trial/
+when: 1652110104.07431
+lastSyncTime: 1652110104.07432
+asMultiple: FALSE
+asStatic: FALSE
