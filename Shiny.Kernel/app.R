@@ -1,11 +1,7 @@
-#
 # This is a Shiny web application. You can run the application by clicking
 # the 'Run App' button above.
 #
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
-#
+
 
 library(shiny)
 library(gapminder)
@@ -57,7 +53,6 @@ ui <-  dashboardPage(
       menuItem("Table", tabName = "table", icon = icon("table")),
       menuItem("Chart", tabName = "plots", icon = icon("chart-area")),
       menuItem("Map", tabName = "map", icon = icon("globe")),
-      menuItem("Download", tabName = "download", icon = icon("download")),
       menuItem("About us", tabName = "about_us", icon = icon("user"))
     )
   ),
@@ -122,15 +117,7 @@ ui <-  dashboardPage(
       tabItem(tabName = "map",
               plotOutput("map", height = 700, dblclick = "map_dblclick", brush = brushOpts(id = "map_brush", resetOnNew =  TRUE)),
               "Drag and double click to zoom"
-      ),
-      
-      
-      # Fifth tab content
-      tabItem(tabName = "download",
-              downloadButton('downloads',"Download the data"),
       )
-      
-      
     )
   )
 )
@@ -228,10 +215,7 @@ server <- function(input, output, session){
     str(res_filter$filtered())
   })
   
-  #output$downloads <- renderDataTable(res_filter, extensions = "Buttons", 
-   #                                   options = list(dom = 'Bfrtip',
-  #                                    buttons = c('copy', 'csv', 'excel', 'pdf', 'print'))
-  #)
+  
 
 }
 
