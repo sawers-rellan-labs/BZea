@@ -38,6 +38,7 @@ library(ggmap)
 library(maptools)
 library(maps)
 library(dashboardthemes)
+library(sf)
 
 #Loading Data Table
 sb <- vroom::vroom("Data/data.csv")
@@ -178,7 +179,10 @@ server <- function(input, output, session){
   
   output$table <- DT::renderDT({
     res_filter$filtered()
-  }, options = list(pageLength = 25))
+  }, extensions = 'Buttons', options = list(dom = 'Bfrtip',
+                             buttons = c('copy', 'csv', 'excel', 'pdf', 'print'),
+                             pageLength = 100)
+                    )
   
   output$plot.alt = renderPlot({
     ggplot(res_filter$filtered(), aes(x = Altitude)) +
@@ -196,7 +200,9 @@ server <- function(input, output, session){
   mapWorld <- borders("world", colour="gray50", fill="white")
   output$map = renderPlot({
     ggplot( ) + mapWorld + geom_point(data = res_filter$filtered(), aes(x = Longitude, y = Latitude, color = Race), alpha = 0.5) +
-      coord_cartesian(xlim = ranges$x, ylim = ranges$y, expand = FALSE)
+      coord_cartesian(xlim = ranges$x, ylim = ranges$y, expand = FALSE) 
+       
+      
   })
   
   observeEvent(input$map_dblclick, {
@@ -222,16 +228,11 @@ server <- function(input, output, session){
     str(res_filter$filtered())
   })
   
-  output$downloads <- downloadHandler(
-    filename = function(){"table.csv"}, 
-    content = function(fname){
-      write.csv(data, fname)
-    }
-  )
-  
-  
-  
-  
+  #output$downloads <- renderDataTable(res_filter, extensions = "Buttons", 
+   #                                   options = list(dom = 'Bfrtip',
+  #                                    buttons = c('copy', 'csv', 'excel', 'pdf', 'print'))
+  #)
+
 }
 
 shinyApp(ui, server)
