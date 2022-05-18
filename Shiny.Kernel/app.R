@@ -68,7 +68,7 @@ ui <-  dashboardPage(
                 radioButtons(
                   inputId = "dataset",
                   label = "Data:",
-                  choices = c("B73xTEO-LR-Pops-Metadata" = "zm"
+                  choices = c("B73xTEO Introgression Lines" = "sb"
                               
                               
                   ),
@@ -108,9 +108,17 @@ ui <-  dashboardPage(
       
       # Third tab content
       tabItem(tabName = "plots",
-              fluidRow(
-                splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot.alt"), plotOutput("plot.phos"))
+              fluidPage(
+                varSelectInput("variable","Variable:", Filter(is.numeric, data),
+                               selected = NULL),
+                plotOutput("data")
               )
+              # fluidRow(
+              #   #splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot.alt"), plotOutput("plot.phos"))
+              #   column(width = 3, offset = 9,
+              #          varSelectInput("y", "y", colnames(data), Filter(is.numeric, data), selected = NULL), style="z-index:1002;")
+              # ),
+              # fluidRow(plotlyOutput("plot"))
       ),
       
       # Fourth tab content
@@ -171,18 +179,36 @@ server <- function(input, output, session){
                              pageLength = 100)
                     )
   
-  output$plot.alt = renderPlot({
-    ggplot(res_filter$filtered(), aes(x = Altitude)) +
-      geom_histogram(color="black", fill="white") +
-      geom_vline(aes(xintercept=mean(Altitude)),
-                 color="blue", linetype="dashed", size=1)
+  output$plots <- renderPlot({
+    ggplot(res_filter$filtered(), aes(.data[[input$variable]])) + geom_histogram()
+  
+    # g <- ggplot(res_filter$filtered(), aes_string("disp", data$y)) +
+    #   geom_point()
+    # g <- ggplotly(g) %>%
+    #   config(displayModeBar = TRUE)
+    # g
   })
-  output$plot.phos = renderPlot({
-    ggplot(res_filter$filtered(), aes(x = Phosphorus)) +
-      geom_histogram(color="black", fill="white") +
-      geom_vline(aes(xintercept=mean(Phosphorus)),
-                 color="blue", linetype="dashed", size=1)
-  })
+  
+  # output$plot.alt = renderPlot({
+  #   ggplot(res_filter$filtered(), aes(x = Altitude)) +
+  #     geom_histogram(color="black", fill="white") +
+  #     geom_vline(aes(xintercept=mean(Altitude)),
+  #                color="blue", linetype="dashed", size=1)
+  # })
+  # output$plot.phos = renderPlot({
+  #   # g <- ggplot(res_filter$filtered(), aes_string("Phosphorus"))+
+  #   #   geom_point()
+  #   # g <- ggplotly(g) %>%
+  #   #   config(displayModeBar = TRUE)
+  #   # g
+  #   g <- ggplot(res_filter$filtered(), aes(x = Phosphorus)) +
+  #     geom_histogram(color="black", fill="white") +
+  #     geom_vline(aes(xintercept=mean(Phosphorus)),
+  #                color="blue", linetype="dashed", size=1)
+  #   g <- ggplotly(g) %>%
+  #       config(displayModeBar = TRUE)
+  #   g
+  # })
   
   mapWorld <- borders("world", colour="gray50", fill="white")
   output$map = renderPlot({
