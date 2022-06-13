@@ -44,7 +44,7 @@ sap <- vroom::vroom("Data/SAP.csv")
 # Define UI for application that draws a histogram
 ui <-  dashboardPage(
   
-  dashboardHeader(title =  "Crop Hub"),
+  dashboardHeader(title =  "BZea"),
   
   dashboardSidebar(
     sidebarMenu(
@@ -68,7 +68,7 @@ ui <-  dashboardPage(
                 radioButtons(
                   inputId = "dataset",
                   label = "Data:",
-                  choices = c("B73xTEO Introgression Lines" = "sb"
+                  choices = c("B73xTEO Introgression Lines" = "zm"
                               
                               
                   ),
@@ -108,17 +108,20 @@ ui <-  dashboardPage(
       
       # Third tab content
       tabItem(tabName = "plots",
-              fluidPage(
-                varSelectInput("variable","Variable:", Filter(is.numeric, data),
-                               selected = NULL),
-                plotOutput("data")
-              )
+              # fluidPage(
+              #   varSelectInput("variable","Variable:", Filter(is.numeric, data),
+              #                  selected = NULL),
+              #   plotOutput("data")
+              # )
               # fluidRow(
-              #   #splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot.alt"), plotOutput("plot.phos"))
+              #   splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot.alt"), plotOutput("plot.phos")),
               #   column(width = 3, offset = 9,
               #          varSelectInput("y", "y", colnames(data), Filter(is.numeric, data), selected = NULL), style="z-index:1002;")
               # ),
               # fluidRow(plotlyOutput("plot"))
+              fluidRow(
+                splitLayout(cellWidths = c("50%", "50%"), plotOutput("plot.alt"), plotOutput("plot.phos"))
+              )
       ),
       
       # Fourth tab content
