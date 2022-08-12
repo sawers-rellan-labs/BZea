@@ -39,6 +39,8 @@ library(sf)
 #Loading Data Table
 sb <- vroom::vroom("Data/data.csv")
 zm <- vroom::vroom("Data/B73xTEO-LR-Pops-Metadata_all.csv")
+zm_lr <- zm[which(zm$Population == "LANDB"), ]
+zm_teo <- zm[which(zm$Population == "R2Teo" | zm$Population == "J2Teo" ), ]
 sap <- vroom::vroom("Data/SAP.csv")
 
 # Define UI for application that draws a histogram
